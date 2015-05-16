@@ -1,0 +1,8 @@
+---
+fixtures:
+  symlinks:
+    clamav: "#{source_dir}"
+    common: "#{source_dir}/../common"
+    logrotate: "#{source_dir}/../logrotate"
+    rsync: "#{source_dir}/../rsync"
+    stdlib: "#{source_dir}/../stdlib"

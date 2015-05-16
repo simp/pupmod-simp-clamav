@@ -1,0 +1,54 @@
+<%
+  t_clamscan_cmd = ["/bin/nice -n #{@nice_level} /usr/bin/clamscan -l #{@logfile}"]
+
+  if @official_db_only then
+    t_clamscan_cmd << '--official-db-only=yes'
+  end
+
+  if @recursive then
+    t_clamscan_cmd << '-r'
+  end
+
+  if not @cross_fs then
+    t_clamscan_cmd << '--cross-fs=no'
+  end
+
+  if not @summary then
+    t_clamscan_cmd << '--no-summary'
+  end
+
+  if @infected_only then
+    t_clamscan_cmd << '-i'
+  end
+
+  if not @bytecode then
+    t_clamscan_cmd << '--bytecode=no'
+  end
+
+  if @bytecode_unsigned then
+    t_clamscan_cmd << '--bytecode-unsigned=yes'
+  end
+
+  if @detect_pua then
+    t_clamscan_cmd << '--detect-pua=yes'
+
+    Array(@exclude_pua).each do |x|
+      t_clamscan_cmd << "--exclude-pua=#{x}"
+    end
+
+    Array(@include_pua).each do |x|
+      t_clamscan_cmd << "--include-pua=#{x}"
+    end
+  end
+
+  t_clamscan_cmd << "--bytecode-timeout=#{@bytecode_timeout}"
+  t_clamscan_cmd << "--max-files=#{@max_files}"
+  t_clamscan_cmd << "--max-filesize=#{@max_filesize}M"
+  t_clamscan_cmd << "--max-scansize=#{@max_scansize}M"
+  t_clamscan_cmd << "--max-recursion=#{@max_recursion}"
+  t_clamscan_cmd << "--max-dir-recursion=#{@max_dir_recursion}"
+
+  t_clamscan_cmd += Array(@scan_targets.join(' '))
+
+-%>
+<%= t_clamscan_cmd.join(' ') -%>
