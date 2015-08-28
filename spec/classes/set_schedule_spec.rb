@@ -1,8 +1,26 @@
 require 'spec_helper'
 
 describe 'clamav::set_schedule' do
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      let(:facts) do
+        facts
+      end
 
-  it { should create_class('clamav::set_schedule') }
-  it { should compile.with_all_deps }
-  it { should create_cron('clamscan') }
+      context "on #{os}" do
+        it { is_expected.to create_class('clamav::set_schedule') }
+        it { is_expected.to compile.with_all_deps }
+
+        context 'base' do
+          it { should create_cron('clamscan').with_ensure('present') }
+        end
+        context 'with enable_schedule => false' do
+          let (:params) {{
+            :enable_schedule => false
+          }}
+          it { should create_cron('clamscan').with_ensure('absent') }
+        end
+      end
+    end
+  end
 end
