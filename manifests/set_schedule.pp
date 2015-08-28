@@ -10,6 +10,9 @@
 #
 # == Parameters
 #
+# [*enable_schedule*]
+#   Enables/Disables the clamscan cronjob.  Defaults to true.
+#
 # [*minute*]
 # [*hour*]
 # [*monthday*]
@@ -49,6 +52,7 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav::set_schedule (
+  $enable_schedule = defined('$::enable_clamav') ? { true => $::enable_clamav, default => hiera('enable_clamav',true) },
   $minute = '32',
   $hour = '5',
   $monthday = '*',
@@ -76,24 +80,8 @@ class clamav::set_schedule (
 ) {
   include 'logrotate'
 
-  cron { 'clamscan':
-    command  => template('clamav/clamscan_cmd.erb'),
-    user     => 'root',
-    minute   => $minute,
-    hour     => $hour,
-    monthday => $monthday,
-    month    => $month,
-    weekday  => $weekday
-  }
-
-  # add the logrotate file
-  logrotate::add { 'clamscan':
-    log_files  => [ $logfile ],
-    missingok  => true,
-    lastaction => '/sbin/service rsyslog restart > /dev/null 2>&1 || true'
-  }
-
   # Validation
+  validate_bool($enable_schedule)
   validate_integer($minute)
   validate_integer($hour)
   validate_integer($weekday)
@@ -116,4 +104,24 @@ class clamav::set_schedule (
   validate_integer($max_scansize)
   validate_integer($max_recursion)
   validate_integer($max_dir_recursion)
+
+  # Disable clam scans if clamav is not enabled.
+  cron { 'clamscan':
+    ensure   => $enable_schedule ? { true => 'present', default => 'absent' },
+    command  => template('clamav/clamscan_cmd.erb'),
+    user     => 'root',
+    minute   => $minute,
+    hour     => $hour,
+    monthday => $monthday,
+    month    => $month,
+    weekday  => $weekday
+  }
+
+  # add the logrotate file
+  logrotate::add { 'clamscan':
+    log_files  => [ $logfile ],
+    missingok  => true,
+    lastaction => '/sbin/service rsyslog restart > /dev/null 2>&1 || true'
+  }
+
 }
