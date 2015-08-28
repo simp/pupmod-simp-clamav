@@ -9,43 +9,95 @@
 #
 # == Variables
 #
+# [*enable_clamav*]
+#   Type: Boolean
+#   Default: true
+#     Disables/Enables clamav.  Toggles freshclam/clamscan cronjobs, selbooleans,
+#     rsyc, and package installation.  Defaults to true.
+#
+# [*manage_group_and_user*]
+#   Type: Boolean
+#   Default: true
+#     Optionally manage the clamav user and group.
+#
+# [*clamav_user*]
+#   Type: String
+#   Default: clam
+#     The clamav user.
+#
+# [*clamav_group*]
+#   Type: String
+#   Default: clam
+#     The clamav group.
+#
+# [*package_name*]
+#   Type: String
+#   Default: clamav
+#     The name of clamav rpm package.
+#
 # [*enable_freshclam*]
-# Type: Boolean
-# Default: false
-#   If true, will enable the freshclam cron job, otherwise rsync will be used.
+#   Type: Boolean
+#   Default: false
+#     If true, will enable the freshclam cron job, otherwise rsync will be used.
 #
 # [*schedule_scan*]
-# Type: Boolean
-# Default: true
-#   If true, will enable the scheduled system scan.
-#   The default targets are *extremely* conservative so you'll probably want to
-#   adjust this.
+#   Type: Boolean
+#   Default: true
+#     If true, will enable the scheduled system scan.
+#     The default targets are *extremely* conservative so you'll probably want to
+#     adjust this.
 #
 # == Authors
 #
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav (
-  $enable_freshclam = false,
-  $schedule_scan = true,
-  $rsync_server = hiera('rsync::server'),
-  $rsync_timeout = hiera('rsync::timeout', '2')
+  $enable_clamav         = defined('$::enable_clamav') ? { true => $::enable_clamav, default => hiera('enable_clamav',true) },
+  $manage_group_and_user = true,
+  $clamav_user           = 'clam',
+  $clamav_group          = 'clam',
+  $package_name          = 'clamav',
+  $enable_freshclam      = false,
+  $schedule_scan         = true,
+  $rsync_server          = hiera('rsync::server'),
+  $rsync_timeout         = hiera('rsync::timeout', '2')
 ) {
 
-  if $schedule_scan { include clamav::set_schedule }
+  # Validation.
+  validate_bool($enable_clamav)
+  validate_bool($manage_group_and_user)
+  validate_string($package_name)
+  validate_bool($enable_freshclam)
+  validate_bool($schedule_scan)
+  validate_net_list($rsync_server)
+  validate_integer($rsync_timeout)
 
-  group { 'clam':
-    ensure    => 'present',
-    allowdupe => false,
-    gid       => '409'
+  if $schedule_scan {
+    include clamav::set_schedule
   }
 
-  package { 'clamav':
-    ensure  => 'latest',
-    require => [
-      User['clam'],
-      Group['clam']
-    ]
+  if $manage_group_and_user {
+    group { $clamav_group:
+      ensure    =>  'present',
+      allowdupe => false,
+      gid       => '409'
+    }
+    user { $clamav_user:
+      ensure     => 'present',
+      allowdupe  => false,
+      comment    => 'Clam Anti Virus Checker',
+      uid        => '409',
+      shell      => '/sbin/nologin',
+      gid        => $clamav_group,
+      home       => '/var/lib/clamav',
+      membership => 'inclusive',
+      require    => Group[$clamav_group]
+    }
+  }
+  # Require the user and group if managing them, otherwise don't.
+  package { $package_name:
+    ensure  => $enable_clamav ? { true => 'latest', default => 'absent' },
+    require => $manage_group_and_user ? { true => [User[$clamav_user],Group[$clamav_group]], default => [] }
   }
 
   # This is hackery to fix an update issue from the past.
@@ -56,13 +108,14 @@ class clamav (
     }
     package { 'clamav-lib.i386':
       ensure => 'absent',
-      notify => Package['clamav']
+      notify => Package[$package_name]
     }
   }
 
   if $enable_freshclam {
+    # Remove freshclam if clamav is not enabled.
     file { '/etc/cron.daily/freshclam':
-      ensure => 'file',
+      ensure => $enable_clamav ? { true => 'file', default => 'absent' },
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
@@ -72,36 +125,23 @@ class clamav (
   else {
     file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
-    rsync { 'clamav':
-      source  => 'clamav/',
-      target  => '/var/lib/clamav',
-      server  => $rsync_server,
-      timeout => $rsync_timeout,
-      delete  => true,
-      require => [
-        Package['clamav'],
-        User['clam']
-      ]
-
+    # Only rsync if clamav is enabled.
+    if $enable_clamav {
+      rsync { 'clamav':
+        source  => 'clamav/',
+        target  => '/var/lib/clamav',
+        server  => $rsync_server,
+        timeout => $rsync_timeout,
+        delete  => true,
+        require => Package[$package_name]
+      }
     }
   }
 
   if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
     selboolean { 'antivirus_can_scan_system':
       persistent => true,
-      value      => 'on'
+      value      => $enable_clamav ? { true => 'on', default => 'off' }
     }
-  }
-
-  user { 'clam':
-    ensure     => 'present',
-    allowdupe  => false,
-    comment    => 'Clam Anti Virus Checker',
-    uid        => '409',
-    shell      => '/sbin/nologin',
-    gid        => 'clam',
-    home       => '/var/lib/clamav',
-    membership => 'inclusive',
-    require    => Group['clam']
   }
 }
