@@ -5,5 +5,6 @@ fixtures:
     logrotate: "git://github.com/simp/pupmod-simp-logrotate"
     rsync: "git://github.com/simp/pupmod-simp-rsync"
     stdlib: "git://github.com/simp/puppetlabs-stdlib"
+    selinux: "git://github.com/simp/pupmod-simp-selinux"
   symlinks:
     clamav: "#{source_dir}"

@@ -1,7 +1,7 @@
 Summary: ClamAV Puppet Module
 Name: pupmod-clamav
 Version: 4.1.0
-Release: 5
+Release: 6
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -56,6 +56,12 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Fri Aug 28 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-6
+- Added enable_clamav parameter to toggle: package install,
+  freshclam/clamscan cron jobs, clamav rsync, antivirus selboolean.
+- The clamav user, group now manageable and package name mutable.
+- Added validation to init.pp
+
 * Fri Feb 27 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-5
 - Updated to use the new 'simp' environment.
 - Changed calls directly to /etc/init.d/rsyslog to '/sbin/service rsyslog' so
