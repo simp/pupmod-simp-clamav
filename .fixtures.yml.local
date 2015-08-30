@@ -6,3 +6,4 @@ fixtures:
     logrotate: "#{source_dir}/../logrotate"
     rsync: "#{source_dir}/../rsync"
     stdlib: "#{source_dir}/../stdlib"
+    selinux: "#{source_dir}/../selinux"
