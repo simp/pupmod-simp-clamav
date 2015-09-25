@@ -59,7 +59,7 @@ class clamav (
   $package_name          = 'clamav',
   $enable_freshclam      = false,
   $schedule_scan         = true,
-  $rsync_server          = hiera('rsync::server'),
+  $rsync_server          = hiera('rsync::server',''),
   $rsync_timeout         = hiera('rsync::timeout', '2')
 ) {
 
@@ -69,7 +69,6 @@ class clamav (
   validate_string($package_name)
   validate_bool($enable_freshclam)
   validate_bool($schedule_scan)
-  validate_net_list($rsync_server)
   validate_integer($rsync_timeout)
 
   if $schedule_scan {
@@ -123,6 +122,13 @@ class clamav (
     }
   }
   else {
+    if empty($rsync_server) {
+      fail('You must supply a value for $rsync_server')
+    }
+    else {
+      validate_net_list($rsync_server)
+    }
+
     file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
     # Only rsync if clamav is enabled.
