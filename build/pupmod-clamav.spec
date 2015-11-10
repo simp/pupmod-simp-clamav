@@ -1,7 +1,7 @@
 Summary: ClamAV Puppet Module
 Name: pupmod-clamav
 Version: 4.1.0
-Release: 6
+Release: 7
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -56,6 +56,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Nov 10 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-7
+- migration to simplib and simpcat (lib/ only)
+
 * Fri Aug 28 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-6
 - Added enable_clamav parameter to toggle: package install,
   freshclam/clamscan cron jobs, clamav rsync, antivirus selboolean.
@@ -91,7 +94,7 @@ fi
 * Thu Feb 13 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-1
 - Converted all string booleans into native booleans.
 
-* Mon Dec 10 2013 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-0
+* Tue Dec 10 2013 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-0
 - Changed singleton clamav::set_schedule define to paramterized class
   and updated code documentation for compatibility with puppet 3 and hiera.
 
@@ -150,7 +153,7 @@ fi
 * Tue Jan 11 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
 - Refactored for SIMP-2.0.0-alpha release
 
-* Tue Oct 27 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-2
+* Wed Oct 27 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-2
 - Added set_schedule define
 
 * Tue Oct 26 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-1
