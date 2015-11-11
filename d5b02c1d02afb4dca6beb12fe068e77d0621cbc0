@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_59825153",
+        "filename": ".fixtures.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-11-11T20:11:01Z",
+      "side": 1,
+      "message": "wat.",
+      "revId": "d5b02c1d02afb4dca6beb12fe068e77d0621cbc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_79870d62",
+        "filename": ".fixtures.yml.local",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-11-11T20:11:01Z",
+      "side": 1,
+      "message": "concat",
+      "revId": "d5b02c1d02afb4dca6beb12fe068e77d0621cbc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
