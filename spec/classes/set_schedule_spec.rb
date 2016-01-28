@@ -12,13 +12,13 @@ describe 'clamav::set_schedule' do
         it { is_expected.to compile.with_all_deps }
 
         context 'base' do
-          it { should create_cron('clamscan').with_ensure('present') }
+          it { is_expected.to create_cron('clamscan').with_ensure('present') }
         end
         context 'with enable_schedule => false' do
           let (:params) {{
             :enable_schedule => false
           }}
-          it { should create_cron('clamscan').with_ensure('absent') }
+          it { is_expected.to create_cron('clamscan').with_ensure('absent') }
         end
       end
     end

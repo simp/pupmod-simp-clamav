@@ -1,7 +1,6 @@
 ---
 fixtures:
   repositories:
-    common: "git://github.com/simp/pupmod-simp-common"
     simplib: "git://github.com/simp/pupmod-simp-simplib"
     logrotate: "git://github.com/simp/pupmod-simp-logrotate"
     rsync: "git://github.com/simp/pupmod-simp-rsync"

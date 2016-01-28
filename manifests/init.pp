@@ -93,10 +93,13 @@ class clamav (
       require    => Group[$clamav_group]
     }
   }
+
   # Require the user and group if managing them, otherwise don't.
+  $_clamav_package_ensure   = $enable_clamav ? { true => 'latest', default => 'absent' }
+  $_clamav_package_requires = $manage_group_and_user ? { true => [User[$clamav_user],Group[$clamav_group]], default => [] }
   package { $package_name:
-    ensure  => $enable_clamav ? { true => 'latest', default => 'absent' },
-    require => $manage_group_and_user ? { true => [User[$clamav_user],Group[$clamav_group]], default => [] }
+    ensure  => $_clamav_package_ensure,
+    require => $_clamav_package_requires,
   }
 
   # This is hackery to fix an update issue from the past.
@@ -113,8 +116,9 @@ class clamav (
 
   if $enable_freshclam {
     # Remove freshclam if clamav is not enabled.
+    $_clamav_file_ensure   = $enable_clamav ? { true => 'file', default => 'absent' }
     file { '/etc/cron.daily/freshclam':
-      ensure => $enable_clamav ? { true => 'file', default => 'absent' },
+      ensure => $_clamav_file_ensure,
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
@@ -145,9 +149,10 @@ class clamav (
   }
 
   if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
+    $_clamav_av_enable = $enable_clamav ? { true => 'on', default => 'off' }
     selboolean { 'antivirus_can_scan_system':
       persistent => true,
-      value      => $enable_clamav ? { true => 'on', default => 'off' }
+      value      => $_clamav_av_enable
     }
   }
 }
