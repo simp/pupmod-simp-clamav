@@ -106,8 +106,9 @@ class clamav::set_schedule (
   validate_integer($max_dir_recursion)
 
   # Disable clam scans if clamav is not enabled.
+  $_clamscan_ensure = $enable_schedule ? { true => 'present', default => 'absent' }
   cron { 'clamscan':
-    ensure   => $enable_schedule ? { true => 'present', default => 'absent' },
+    ensure   => $_clamscan_ensure,
     command  => template('clamav/clamscan_cmd.erb'),
     user     => 'root',
     minute   => $minute,
