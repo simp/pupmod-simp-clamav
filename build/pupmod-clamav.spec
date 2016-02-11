@@ -1,7 +1,7 @@
 Summary: ClamAV Puppet Module
 Name: pupmod-clamav
 Version: 4.1.0
-Release: 7
+Release: 8
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -12,6 +12,7 @@ Requires: puppet >= 3.3.0
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
 Obsoletes: pupmod-clamav-test
+Requires: pupmod-onyxpoint-compliance_markup
 
 Prefix: /etc/puppet/environments/simp/modules
 
@@ -56,6 +57,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Wed Feb 10 2016 Ralph Wright <ralph.wright@onypoint.com> - 4.1.0-8
+- Added compliance function support
+
 * Tue Nov 10 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-7
 - migration to simplib and simpcat (lib/ only)
 
