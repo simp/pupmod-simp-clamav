@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_08741afc",
+        "filename": "build/pupmod-clamav.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-02-17T20:38:31Z",
+      "side": 1,
+      "message": ":(",
+      "range": {
+        "startLine": 60,
+        "startChar": 45,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "e1f2452c7305dcf39d7ed5ebb2704cf9b7eb2fae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
