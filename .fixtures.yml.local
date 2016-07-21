@@ -1,9 +1,10 @@
----
-fixtures:
-  symlinks:
-    clamav: "#{source_dir}"
-    simplib: "#{source_dir}/../simplib"
-    logrotate: "#{source_dir}/../logrotate"
-    rsync: "#{source_dir}/../rsync"
-    stdlib: "#{source_dir}/../stdlib"
-    selinux: "#{source_dir}/../selinux"
+--- 
+  fixtures: 
+    symlinks: 
+      clamav: "#{source_dir}"
+      compliance: "#{source_dir}/../compliance"
+      logrotate: "#{source_dir}/../logrotate"
+      rsync: "#{source_dir}/../rsync"
+      selinux: "#{source_dir}/../selinux"
+      simplib: "#{source_dir}/../simplib"
+      stdlib: "#{source_dir}/../stdlib"
