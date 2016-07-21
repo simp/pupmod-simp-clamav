@@ -1,0 +1,4 @@
+Requires: pupmod-simp-compliance_markup
+Requires: pupmod-simp-rsync >= 4.1.0-1
+Requires: simp-rsync >= 4.0.1-14
+Obsoletes: pupmod-clamav-test
