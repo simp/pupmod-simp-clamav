@@ -1,13 +1,23 @@
 ---
 fixtures:
   repositories:
-    compliance_markup: "https://github.com/simp/pupmod-simp-compliance_markup"
-    logrotate: "https://github.com/simp/pupmod-simp-logrotate"
-    rsync: "https://github.com/simp/pupmod-simp-rsync"
-    selinux: "https://github.com/simp/pupmod-simp-selinux"
-    simplib: "https://github.com/simp/pupmod-simp-simplib"
+    compliance_markup:
+      repo: https://github.com/simp/pupmod-simp-compliance_markup
+      branch: 5.X
+    logrotate:
+      repo: https://github.com/simp/pupmod-simp-logrotate
+      branch: 5.X
+    rsync:
+      repo: https://github.com/simp/pupmod-simp-rsync
+      branch: 5.X
+    selinux:
+      repo: https://github.com/simp/pupmod-simp-selinux
+      branch: 5.X
+    simplib:
+      repo: https://github.com/simp/pupmod-simp-simplib
+      branch: 5.X
     stdlib:
-      repo: "https://github.com/simp/puppetlabs-stdlib"
-      branch: "simp-master"
+      branch: 5.X
+      repo: https://github.com/simp/puppetlabs-stdlib
   symlinks:
     clamav: "#{source_dir}"
