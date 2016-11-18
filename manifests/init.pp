@@ -71,7 +71,6 @@ class clamav (
   validate_bool($schedule_scan)
   validate_integer($rsync_timeout)
 
-  compliance_map()
 
   if $schedule_scan {
     include clamav::set_schedule

@@ -1,13 +1,1 @@
----
-fixtures:
-  repositories:
-    compliance_markup: "https://github.com/simp/pupmod-simp-compliance_markup"
-    logrotate: "https://github.com/simp/pupmod-simp-logrotate"
-    rsync: "https://github.com/simp/pupmod-simp-rsync"
-    selinux: "https://github.com/simp/pupmod-simp-selinux"
-    simplib: "https://github.com/simp/pupmod-simp-simplib"
-    stdlib:
-      repo: "https://github.com/simp/puppetlabs-stdlib"
-      branch: "simp-master"
-  symlinks:
-    clamav: "#{source_dir}"
+w
