@@ -35,7 +35,7 @@ describe 'clamav' do
             })
           }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
-          it { is_expected.to contain_rsync('clamav') }
+          it { is_expected.to contain_rsync("clamav_#{environment}") }
         end
 
         context 'with manage_group_and_user => false' do
@@ -55,7 +55,7 @@ describe 'clamav' do
             :enable_freshclam => true
           }}
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('file') }
-          it { is_expected.not_to contain_rsync('clamav') }
+          it { is_expected.not_to contain_rsync("clamav_#{environment}") }
         end
 
         context 'with enable_clamav => false' do
@@ -64,7 +64,7 @@ describe 'clamav' do
           }}
           it { is_expected.to contain_package('clamav').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
-          it { is_expected.not_to contain_rsync('clamav') }
+          it { is_expected.not_to contain_rsync("clamav_#{environment}") }
         end
       end
     end

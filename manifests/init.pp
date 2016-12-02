@@ -71,9 +71,8 @@ class clamav (
   validate_bool($schedule_scan)
   validate_integer($rsync_timeout)
 
-
   if $schedule_scan {
-    include clamav::set_schedule
+    include '::clamav::set_schedule'
   }
 
   if $manage_group_and_user {
@@ -138,7 +137,7 @@ class clamav (
 
     # Only rsync if clamav is enabled.
     if $enable_clamav {
-      rsync { 'clamav':
+      rsync { "clamav_${environment}":
         source  => 'clamav/',
         target  => '/var/lib/clamav',
         server  => $rsync_server,
