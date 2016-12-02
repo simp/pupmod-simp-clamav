@@ -59,6 +59,7 @@ class clamav (
   $package_name          = 'clamav',
   $enable_freshclam      = false,
   $schedule_scan         = true,
+  $rsync_source          = "clamav_${environment}/",
   $rsync_server          = hiera('rsync::server',''),
   $rsync_timeout         = hiera('rsync::timeout', '2')
 ) {
@@ -137,8 +138,8 @@ class clamav (
 
     # Only rsync if clamav is enabled.
     if $enable_clamav {
-      rsync { "clamav_${environment}":
-        source  => 'clamav/',
+      rsync { 'clamav':
+        source  => $rsync_source,
         target  => '/var/lib/clamav',
         server  => $rsync_server,
         timeout => $rsync_timeout,
