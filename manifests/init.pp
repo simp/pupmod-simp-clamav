@@ -59,7 +59,7 @@ class clamav (
   $package_name          = 'clamav',
   $enable_freshclam      = false,
   $schedule_scan         = true,
-  $rsync_source          = "clamav_${environment}/",
+  $rsync_source          = "clamav_${::environment}/",
   $rsync_server          = hiera('rsync::server',''),
   $rsync_timeout         = hiera('rsync::timeout', '2')
 ) {
