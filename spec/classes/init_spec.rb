@@ -7,12 +7,14 @@ describe 'clamav' do
       let(:facts) do
         facts
       end
+      let(:environment) {:production}
 
       context "on #{os}" do
         it { is_expected.to create_class('clamav') }
         it { is_expected.to compile.with_all_deps }
 
         context 'base' do
+
           it { is_expected.to create_group('clam').with_ensure('present') }
           it { is_expected.to create_user('clam').with({
             :ensure    => 'present',
@@ -35,7 +37,10 @@ describe 'clamav' do
             })
           }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
-          it { is_expected.to contain_rsync('clamav') }
+          it { is_expected.to contain_rsync('clamav').with({
+            :source => 'clamav_production/'
+            })
+          }
         end
 
         context 'with manage_group_and_user => false' do

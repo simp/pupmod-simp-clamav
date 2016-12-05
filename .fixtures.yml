@@ -2,7 +2,7 @@
 fixtures:
   repositories:
     logrotate: https://github.com/simp/pupmod-simp-logrotate
-#    rsync: https://github.com/simp/pupmod-simp-rsync
+    rsync: https://github.com/simp/pupmod-simp-rsync
     selinux: https://github.com/simp/pupmod-simp-selinux
     simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib:
@@ -10,4 +10,3 @@ fixtures:
       branch: simp-master
   symlinks:
     clamav: "#{source_dir}"
-    rsync: "#{source_dir}/../rsync"
