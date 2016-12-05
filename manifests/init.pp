@@ -59,6 +59,7 @@ class clamav (
   $package_name          = 'clamav',
   $enable_freshclam      = false,
   $schedule_scan         = true,
+  $rsync_source          = "clamav_${::environment}/",
   $rsync_server          = hiera('rsync::server',''),
   $rsync_timeout         = hiera('rsync::timeout', '2')
 ) {
@@ -71,9 +72,8 @@ class clamav (
   validate_bool($schedule_scan)
   validate_integer($rsync_timeout)
 
-
   if $schedule_scan {
-    include clamav::set_schedule
+    include '::clamav::set_schedule'
   }
 
   if $manage_group_and_user {
@@ -139,7 +139,7 @@ class clamav (
     # Only rsync if clamav is enabled.
     if $enable_clamav {
       rsync { 'clamav':
-        source  => 'clamav/',
+        source  => $rsync_source,
         target  => '/var/lib/clamav',
         server  => $rsync_server,
         timeout => $rsync_timeout,
