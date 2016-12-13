@@ -1,4 +1,4 @@
 ---
-rsync::server: 'test.example.domain'
-rsync::timeout: '2'
-client_nets : ['192.168.122.0/24']
+rsync_server: 'test.example.domain'
+rsync_timeout: '2'
+trusted_nets : ['192.168.122.0/24']

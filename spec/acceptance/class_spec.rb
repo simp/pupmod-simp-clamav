@@ -12,7 +12,7 @@ describe 'clamav class' do
   }}
 
   let(:disable_hieradata) {{
-    'clamav::enable_clamav' => false,
+    'clamav::enable' => false,
     'clamav::enable_freshclam' => true
   }}
 

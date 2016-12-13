@@ -10,7 +10,7 @@
 #
 # == Parameters
 #
-# [*enable_schedule*]
+# [*enable*]
 #   Enables/Disables the clamscan cronjob.  Defaults to true.
 #
 # [*minute*]
@@ -52,61 +52,35 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav::set_schedule (
-  $enable_schedule = defined('$::enable_clamav') ? { true => $::enable_clamav, default => hiera('enable_clamav',true) },
-  $minute = '32',
-  $hour = '5',
-  $monthday = '*',
-  $month = '*',
-  $weekday = '0',
-  $nice_level = '19',
-  $scan_targets = ['/tmp','/var/tmp','/dev/shm'],
-  $official_db_only = true,
-  $logfile = '/var/log/clamscan.log',
-  $recursive = true,
-  $cross_fs = true,
-  $summary = false,
-  $infected_only = true,
-  $bytecode = true,
-  $bytecode_unsigned = false,
-  $bytecode_timeout = '60000',
-  $detect_pua = false,
-  $exclude_pua = [],
-  $include_pua = [],
-  $max_files = '10000',
-  $max_filesize = '25',
-  $max_scansize = '100',
-  $max_recursion = '16',
-  $max_dir_recursion = '15'
+  Boolean                                      $enable            = true,
+  Stdlib::Compat::Integer                      $minute            = '32',
+  Stdlib::Compat::Integer                      $hour              = '5',
+  Variant[Stdlib::Compat::Integer, Enum['*']]  $monthday          = '*',
+  Variant[Stdlib::Compat::Integer, Enum['*']]  $month             = '*',
+  Stdlib::Compat::Integer                      $weekday           = '0',
+  Stdlib::Compat::Integer                      $nice_level        = '19',
+  Array[String]                                $scan_targets      = ['/tmp','/var/tmp','/dev/shm'],
+  Boolean                                      $official_db_only  = true,
+  Stdlib::Absolutepath                         $logfile           = '/var/log/clamscan.log',
+  Boolean                                      $recursive         = true,
+  Boolean                                      $cross_fs          = true,
+  Boolean                                      $summary           = false,
+  Boolean                                      $infected_only     = true,
+  Boolean                                      $bytecode          = true,
+  Boolean                                      $bytecode_unsigned = false,
+  Stdlib::Compat::Integer                      $bytecode_timeout  = '60000',
+  Boolean                                      $detect_pua        = false,
+  Array[String]                                $exclude_pua       = [],
+  Array[String]                                $include_pua       = [],
+  Stdlib::Compat::Integer                      $max_files         = '10000',
+  Stdlib::Compat::Integer                      $max_filesize      = '25',
+  Stdlib::Compat::Integer                      $max_scansize      = '100',
+  Stdlib::Compat::Integer                      $max_recursion     = '16',
+  Stdlib::Compat::Integer                      $max_dir_recursion = '15'
 ) {
   include 'logrotate'
 
-  # Validation
-  validate_bool($enable_schedule)
-  validate_integer($minute)
-  validate_integer($hour)
-  validate_integer($weekday)
-  validate_integer($nice_level)
-  validate_array($scan_targets)
-  validate_bool($official_db_only)
-  validate_absolute_path($logfile)
-  validate_bool($recursive)
-  validate_bool($cross_fs)
-  validate_bool($summary)
-  validate_bool($infected_only)
-  validate_bool($bytecode)
-  validate_integer($bytecode_timeout)
-  validate_bool($bytecode_unsigned)
-  validate_bool($detect_pua)
-  validate_array($exclude_pua)
-  validate_array($include_pua)
-  validate_integer($max_files)
-  validate_integer($max_filesize)
-  validate_integer($max_scansize)
-  validate_integer($max_recursion)
-  validate_integer($max_dir_recursion)
-
-  # Disable clam scans if clamav is not enabled.
-  $_clamscan_ensure = $enable_schedule ? { true => 'present', default => 'absent' }
+  $_clamscan_ensure = $enable ? { true => 'present', default => 'absent' }
   cron { 'clamscan':
     ensure   => $_clamscan_ensure,
     command  => template('clamav/clamscan_cmd.erb'),
@@ -124,5 +98,4 @@ class clamav::set_schedule (
     missingok  => true,
     lastaction => '/sbin/service rsyslog restart > /dev/null 2>&1 || true'
   }
-
 }
