@@ -24,6 +24,20 @@ describe 'clamav class' do
 
   # We need this for our tests to run properly!
   clients.each do |client|
+    on client, puppet('config set stringify_facts false')
+
+    if client['repos']
+      client['repos'].each_pair do |repo,metadata|
+        repo_manifest = <<-EOS
+          yumrepo { #{repo}:
+            baseurl => '#{metadata[:url]}',
+            gpgkey => '#{metadata[:gpgkeys].join(" ")}'
+          }
+        EOS
+        apply_manifest_on(client, repo_manifest, :catch_failures => true)
+      end
+    end
+
     context 'with defaults' do
       it 'should set the context hieradata' do
         set_hieradata_on(client, default_hieradata)
@@ -56,9 +70,8 @@ describe 'clamav class' do
 
       if on(client, '/usr/sbin/selinuxenabled', :accept_all_exit_codes => true).exit_code == 0
         it 'should have the selinux boolean "antivirus_can_scan_system" set' do
-          expect {
-            on(client, '/usr/sbin/getsebool antivirus_can_scan_system') =~ /.*--> on/
-          }.to be_true
+          result = on(client, '/usr/sbin/getsebool antivirus_can_scan_system')
+          expect(result.output).to match(/.*--> on/)
         end
       end
     end
@@ -87,9 +100,8 @@ describe 'clamav class' do
 
       if on(client, '/usr/sbin/selinuxenabled', :accept_all_exit_codes => true).exit_code == 0
         it 'should have the selinux boolean "antivirus_can_scan_system" set' do
-          expect {
-            on(client, '/usr/sbin/getsebool antivirus_can_scan_system') =~ /.*--> off/
-          }.to be_true
+          result = on(client, '/usr/sbin/getsebool antivirus_can_scan_system')
+          expect(result.output).to match(/.*--> off/)
         end
       end
     end

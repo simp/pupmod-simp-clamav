@@ -1,4 +1,4 @@
 ---
-rsync_server: 'test.example.domain'
-rsync_timeout: '2'
-trusted_nets : ['192.168.122.0/24']
+simp_options::rsync::server: 'test.example.domain'
+simp_options::rsync::timeout: '2'
+simp_options::trusted_nets : ['192.168.122.0/24']
