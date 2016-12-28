@@ -11,8 +11,7 @@ HOSTS:
       - master
       - client
     platform:   el-6-x86_64
-    box:        puppetlabs/centos-6.6-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
+    box:        centos/6
     hypervisor: vagrant
   client7-1:
     roles:
@@ -24,9 +23,8 @@ HOSTS:
           - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
           - https://getfedora.org/static/352C64E5.txt
     platform: el-7-x86_64
-    box: puppetlabs/centos-7.0-64-nocm
-    box_url: https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    box: centos/7
     hypervisor: vagrant
 CONFIG:
   log_level: verbose
-  type: foss
+  type: aio

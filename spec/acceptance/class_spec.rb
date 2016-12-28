@@ -24,20 +24,6 @@ describe 'clamav class' do
 
   # We need this for our tests to run properly!
   clients.each do |client|
-    on client, puppet('config set stringify_facts false')
-
-    if client['repos']
-      client['repos'].each_pair do |repo,metadata|
-        repo_manifest = <<-EOS
-          yumrepo { #{repo}:
-            baseurl => '#{metadata[:url]}',
-            gpgkey => '#{metadata[:gpgkeys].join(" ")}'
-          }
-        EOS
-        apply_manifest_on(client, repo_manifest, :catch_failures => true)
-      end
-    end
-
     context 'with defaults' do
       it 'should set the context hieradata' do
         set_hieradata_on(client, default_hieradata)

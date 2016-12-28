@@ -1,5 +1,3 @@
-# == Class: clamav
-#
 # This class installs the command line ClamAV anti-virus scanner and configures
 # updates to be pulled from rsync.
 #
@@ -7,61 +5,43 @@
 # is appropriate, or drop a script into the cron.* directory that is
 # appropriate.
 #
-# == Variables
-#
-# [*enable*]
-#   Type: Boolean
-#   Default: true
+# @param enable
 #     Disables/Enables clamav.  Toggles freshclam/clamscan cronjobs, selbooleans,
-#     rsyc, and package installation.  Defaults to true.
+#     rsync, and package installation.
 #
-# [*manage_group_and_user*]
-#   Type: Boolean
-#   Default: true
+# @param manage_group_and_user
 #     Optionally manage the clamav user and group.
 #
-# [*clamav_user*]
-#   Type: String
-#   Default: clam
+# @param clamav_user
 #     The clamav user.
 #
-# [*clamav_group*]
-#   Type: String
-#   Default: clam
+# @param clamav_group
 #     The clamav group.
 #
-# [*package_name*]
-#   Type: String
-#   Default: clamav
+# @param package_name
 #     The name of clamav rpm package.
 #
-# [*enable_freshclam*]
-#   Type: Boolean
-#   Default: false
+# @param enable_freshclam
 #     If true, will enable the freshclam cron job, otherwise rsync will be used.
 #
-# [*schedule_scan*]
-#   Type: Boolean
-#   Default: true
+# @param schedule_scan
 #     If true, will enable the scheduled system scan.
 #     The default targets are *extremely* conservative so you'll probably want to
 #     adjust this.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav (
-  Boolean                  $enable                = true,
-  Boolean                  $manage_group_and_user = true,
-  String                   $clamav_user           = 'clam',
-  String                   $clamav_group          = 'clam',
-  String                   $package_name          = 'clamav',
-  Boolean                  $enable_freshclam      = false,
-  Boolean                  $schedule_scan         = true,
-  String                   $rsync_source          = "clamav_${::environment}/",
-  String                   $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value'  => '127.0.0.1' }),
-  Stdlib::Compat::Integer  $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => '2' }),
+  Boolean                 $enable                = true,
+  Boolean                 $manage_group_and_user = true,
+  String                  $clamav_user           = 'clam',
+  String                  $clamav_group          = 'clam',
+  String                  $package_name          = 'clamav',
+  Boolean                 $enable_freshclam      = false,
+  Boolean                 $schedule_scan         = true,
+  String                  $rsync_source          = "clamav_${::environment}/",
+  Simplib::IP             $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value'  => '127.0.0.1' }),
+  Stdlib::Compat::Integer $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => '2' }),
 ) {
 
   # If the catalyst is disabled, don't manage anything
@@ -121,13 +101,6 @@ class clamav (
       }
     }
     else {
-      if empty($rsync_server) {
-        fail('You must supply a value for $rsync_server')
-      }
-      else {
-        validate_net_list($rsync_server)
-      }
-
       file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
       if $enable {
