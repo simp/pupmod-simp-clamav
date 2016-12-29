@@ -63,9 +63,9 @@ describe 'clamav' do
           it { is_expected.not_to contain_rsync('clamav') }
         end
 
-        context 'with enable_clamav => false' do
+        context 'with enable => false' do
           let(:params) {{
-            :enable_clamav => false
+            :enable => false
           }}
           it { is_expected.to contain_package('clamav').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }

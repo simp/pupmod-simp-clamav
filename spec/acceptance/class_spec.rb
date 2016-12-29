@@ -12,7 +12,7 @@ describe 'clamav class' do
   }}
 
   let(:disable_hieradata) {{
-    'clamav::enable_clamav' => false,
+    'clamav::enable' => false,
     'clamav::enable_freshclam' => true
   }}
 
@@ -70,9 +70,8 @@ describe 'clamav class' do
 
       if on(client, '/usr/sbin/selinuxenabled', :accept_all_exit_codes => true).exit_code == 0
         it 'should have the selinux boolean "antivirus_can_scan_system" set' do
-          expect {
-            on(client, '/usr/sbin/getsebool antivirus_can_scan_system') =~ /.*--> on/
-          }.to be_true
+          result = on(client, '/usr/sbin/getsebool antivirus_can_scan_system')
+          expect(result.output).to match(/.*--> on/)
         end
       end
     end
@@ -101,9 +100,8 @@ describe 'clamav class' do
 
       if on(client, '/usr/sbin/selinuxenabled', :accept_all_exit_codes => true).exit_code == 0
         it 'should have the selinux boolean "antivirus_can_scan_system" set' do
-          expect {
-            on(client, '/usr/sbin/getsebool antivirus_can_scan_system') =~ /.*--> off/
-          }.to be_true
+          result = on(client, '/usr/sbin/getsebool antivirus_can_scan_system')
+          expect(result.output).to match(/.*--> off/)
         end
       end
     end

@@ -1,112 +1,73 @@
-# == Class: clamav::set_schedule
-#
 # This class allows you to set a schedule for ClamAV to run a check
 # on your system via cron.
 #
-# See clamscan(1) for any undefined variables.
+# @see clamscan(1) for any undefined variables.
 # All 'yes/no' variables have been translated to 'true/false' for consistency.
 #
 # Defaults to weekly.
 #
-# == Parameters
-#
-# [*enable_schedule*]
+# @param enable
 #   Enables/Disables the clamscan cronjob.  Defaults to true.
-#
-# [*minute*]
-# [*hour*]
-# [*monthday*]
-# [*month*]
-# [*weekday*]
-#
-# [*nice_level*]
+# @param minute
+# @param hour
+# @param monthday
+# @param month
+# @param weekday
+# @param nice_level
 #   The system 'nice' level at which to run the virus scan.
-#
-# [*scan_directory*]
+# @param scan_directory
 #   An array of directories upon which to perform this scan.
-#
-# [*official_db_only*]
-# [*logfile*]
-# [*recursive*]
-# [*cross_fs*]
-# [*summary*]
-# [*infected_only*]
-# [*bytecode*]
-# [*bytecode_unsigned*]
-# [*bytecode_timeout*]
-# [*detect_pua*]
-# [*include_pua*]
-# [*max_files*]
-#
-# [*max_filesize*]
+# @param official_db_only
+# @param logfile
+# @param recursive
+# @param cross_fs
+# @param summary
+# @param infected_only
+# @param bytecode
+# @param bytecode_unsigned
+# @param bytecode_timeout
+# @param detect_pua
+# @param include_pua
+# @param max_files
+# @param max_filesize
 #   The maximum archive size to scan, in megabytes.
-#
-# [*max_scansize*]
+# @param max_scansize
 #   The maximum scanned file size to scan, in megabytes.
+# @param max_recursion
+# @param max_dir_recursion
 #
-# [*max_recursion*]
-# [*max_dir_recursion*]
-#
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav::set_schedule (
-  $enable_schedule = defined('$::enable_clamav') ? { true => $::enable_clamav, default => hiera('enable_clamav',true) },
-  $minute = '32',
-  $hour = '5',
-  $monthday = '*',
-  $month = '*',
-  $weekday = '0',
-  $nice_level = '19',
-  $scan_targets = ['/tmp','/var/tmp','/dev/shm'],
-  $official_db_only = true,
-  $logfile = '/var/log/clamscan.log',
-  $recursive = true,
-  $cross_fs = true,
-  $summary = false,
-  $infected_only = true,
-  $bytecode = true,
-  $bytecode_unsigned = false,
-  $bytecode_timeout = '60000',
-  $detect_pua = false,
-  $exclude_pua = [],
-  $include_pua = [],
-  $max_files = '10000',
-  $max_filesize = '25',
-  $max_scansize = '100',
-  $max_recursion = '16',
-  $max_dir_recursion = '15'
+  Boolean                       $enable            = true,
+  Variant[String,Array[String]] $minute            = '32',
+  Variant[String,Array[String]] $hour              = '5',
+  Variant[String,Array[String]] $monthday          = '*',
+  Variant[String,Array[String]] $month             = '*',
+  Variant[String,Array[String]] $weekday           = '0',
+  Integer                       $nice_level        = 19,
+  Array[Stdlib::Absolutepath]   $scan_targets      = ['/tmp','/var/tmp','/dev/shm'],
+  Boolean                       $official_db_only  = true,
+  Stdlib::Absolutepath          $logfile           = '/var/log/clamscan.log',
+  Boolean                       $recursive         = true,
+  Boolean                       $cross_fs          = true,
+  Boolean                       $summary           = false,
+  Boolean                       $infected_only     = true,
+  Boolean                       $bytecode          = true,
+  Boolean                       $bytecode_unsigned = false,
+  Integer                       $bytecode_timeout  = 60000,
+  Boolean                       $detect_pua        = false,
+  Array[String]                 $exclude_pua       = [],
+  Array[String]                 $include_pua       = [],
+  Integer                       $max_files         = 10000,
+  Integer                       $max_filesize      = 25,
+  Integer                       $max_scansize      = 100,
+  Integer                       $max_recursion     = 16,
+  Integer                       $max_dir_recursion = 15,
+  Boolean                       $logrotate         = simplib::lookup('simp_options::logrotate', { 'default_value' => false })
 ) {
-  include 'logrotate'
 
-  # Validation
-  validate_bool($enable_schedule)
-  validate_integer($minute)
-  validate_integer($hour)
-  validate_integer($weekday)
-  validate_integer($nice_level)
-  validate_array($scan_targets)
-  validate_bool($official_db_only)
-  validate_absolute_path($logfile)
-  validate_bool($recursive)
-  validate_bool($cross_fs)
-  validate_bool($summary)
-  validate_bool($infected_only)
-  validate_bool($bytecode)
-  validate_integer($bytecode_timeout)
-  validate_bool($bytecode_unsigned)
-  validate_bool($detect_pua)
-  validate_array($exclude_pua)
-  validate_array($include_pua)
-  validate_integer($max_files)
-  validate_integer($max_filesize)
-  validate_integer($max_scansize)
-  validate_integer($max_recursion)
-  validate_integer($max_dir_recursion)
-
-  # Disable clam scans if clamav is not enabled.
-  $_clamscan_ensure = $enable_schedule ? { true => 'present', default => 'absent' }
+  $_clamscan_ensure = $enable ? { true => 'present', default => 'absent' }
   cron { 'clamscan':
     ensure   => $_clamscan_ensure,
     command  => template('clamav/clamscan_cmd.erb'),
@@ -119,10 +80,13 @@ class clamav::set_schedule (
   }
 
   # add the logrotate file
-  logrotate::add { 'clamscan':
-    log_files  => [ $logfile ],
-    missingok  => true,
-    lastaction => '/sbin/service rsyslog restart > /dev/null 2>&1 || true'
-  }
+  if $logrotate {
+    include '::logrotate'
 
+    logrotate::rule { 'clamscan':
+      log_files  => [ $logfile ],
+      missingok  => true,
+      lastaction => '/sbin/service rsyslog restart > /dev/null 2>&1 || true'
+    }
+  }
 }
