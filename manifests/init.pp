@@ -32,16 +32,16 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav (
-  Boolean                 $enable                = true,
-  Boolean                 $manage_group_and_user = true,
-  String                  $clamav_user           = 'clam',
-  String                  $clamav_group          = 'clam',
-  String                  $package_name          = 'clamav',
-  Boolean                 $enable_freshclam      = false,
-  Boolean                 $schedule_scan         = true,
-  String                  $rsync_source          = "clamav_${::environment}/",
-  Simplib::IP             $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value'  => '127.0.0.1' }),
-  Stdlib::Compat::Integer $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => '2' }),
+  Boolean                                 $enable                = true,
+  Boolean                                 $manage_group_and_user = true,
+  String                                  $clamav_user           = 'clam',
+  String                                  $clamav_group          = 'clam',
+  String                                  $package_name          = 'clamav',
+  Boolean                                 $enable_freshclam      = false,
+  Boolean                                 $schedule_scan         = true,
+  String                                  $rsync_source          = "clamav_${::environment}/",
+  Variant[Simplib::IP,Simplib::Hostname]  $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value'  => '127.0.0.1' }),
+  Stdlib::Compat::Integer                 $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => '2' }),
 ) {
 
   # If the catalyst is disabled, don't manage anything
