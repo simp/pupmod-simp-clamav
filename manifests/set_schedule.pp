@@ -84,9 +84,9 @@ class clamav::set_schedule (
     include '::logrotate'
 
     logrotate::rule { 'clamscan':
-      log_files  => [ $logfile ],
-      missingok  => true,
-      lastaction => '/sbin/service rsyslog restart > /dev/null 2>&1 || true'
+      log_files                 => [ $logfile ],
+      missingok                 => true,
+      lastaction_restart_logger => true
     }
   }
 }
