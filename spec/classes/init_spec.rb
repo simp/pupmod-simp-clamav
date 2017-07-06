@@ -7,7 +7,7 @@ describe 'clamav' do
       let(:facts) do
         facts
       end
-      let(:environment) {:production}
+      let(:environment) {'production'}
 
       context "on #{os}" do
         it { is_expected.to create_class('clamav') }
