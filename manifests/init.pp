@@ -29,6 +29,13 @@
 #     The default targets are *extremely* conservative so you'll probably want to
 #     adjust this.
 #
+# @param rsync_source
+#    The rsync server source path for the clamav definitions.
+#    * Setting this parameter to an empty String will disable the clamav rsync.
+#
+# @param rsync_server
+#    The hostname of IP of the rsync server providing clamav definitions.
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav (
@@ -104,13 +111,15 @@ class clamav (
       file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
       if $enable {
-        rsync { 'clamav':
-          source  => $rsync_source,
-          target  => '/var/lib/clamav',
-          server  => $rsync_server,
-          timeout => $rsync_timeout,
-          delete  => true,
-          require => Package[$package_name]
+        unless $rsync_source.empty() {
+          rsync { 'clamav':
+            source  => $rsync_source,
+            target  => '/var/lib/clamav',
+            server  => $rsync_server,
+            timeout => $rsync_timeout,
+            delete  => true,
+            require => Package[$package_name]
+          }
         }
       }
     }
