@@ -63,6 +63,22 @@ describe 'clamav' do
           it { is_expected.not_to contain_rsync('clamav') }
         end
 
+        context 'with enable_freshclam => false' do
+          let(:params) {{
+            :enable_freshclam => false
+          }}
+          it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
+          it { is_expected.to contain_rsync('clamav') }
+
+          context 'and rsync_source is empty' do
+            let(:params) {{
+              :enable_freshclam => false,
+              :rsync_source => ''
+            }}
+            it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
+            it { is_expected.not_to contain_rsync('clamav') }
+          end
+        end
         context 'with enable => false' do
           let(:params) {{
             :enable => false
