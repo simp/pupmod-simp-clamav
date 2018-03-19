@@ -51,6 +51,8 @@ class clamav (
   Integer       $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
 ) {
 
+  simplib::assert_metadata($module_name)
+
   # If the catalyst is disabled, don't manage anything
   if simplib::lookup('simp_options::clamav', { 'default_value' =>  true }) {
 
