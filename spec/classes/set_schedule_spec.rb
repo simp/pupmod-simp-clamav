@@ -20,7 +20,7 @@ describe 'clamav::set_schedule' do
 
         context 'with logrotate = true' do
           let(:hieradata) { "logrotate_true" }
-          if ['RedHat','CentOS'].include?(facts[:operatingsystem])
+          if ['RedHat','CentOS','OracleLinux'].include?(facts[:operatingsystem])
             if facts[:operatingsystemmajrelease].to_s < '7'
               it { should create_file('/etc/logrotate.d/clamscan').with_content(/#{file_content_6}/)}
             else

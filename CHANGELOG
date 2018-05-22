@@ -1,3 +1,6 @@
+* Mon Mar 19 2018 Trevor Vaughan <tvaughan@onxypoint.com> - 6.0.3-0
+- Add support for Puppet 5 and OEL
+
 * Mon Sep 11 2017 Chris Tessmer <chris.tessmeri@onyxpoint.com> - 6.0.2-0
 - Permit clamav to disable both freshclam AND rsync updates
 
