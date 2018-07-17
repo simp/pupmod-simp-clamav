@@ -1,8 +1,5 @@
 require 'spec_helper'
 
-file_content_7 = "/usr/bin/systemctl restart rsyslog > /dev/null 2>&1 || true"
-file_content_6 = "/sbin/service rsyslog restart > /dev/null 2>&1 || true"
-
 describe 'clamav::set_schedule' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
@@ -20,13 +17,7 @@ describe 'clamav::set_schedule' do
 
         context 'with logrotate = true' do
           let(:hieradata) { "logrotate_true" }
-          if ['RedHat','CentOS','OracleLinux'].include?(facts[:operatingsystem])
-            if facts[:operatingsystemmajrelease].to_s < '7'
-              it { should create_file('/etc/logrotate.d/clamscan').with_content(/#{file_content_6}/)}
-            else
-              it { should create_file('/etc/logrotate.d/clamscan').with_content(/#{file_content_7}/)}
-            end
-          end
+          it { is_expected.to create_logrotate__rule('clamscan').with_log_files(['/var/log/clamscan.log' ]) }
         end
 
         context 'with enable => false' do
