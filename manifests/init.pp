@@ -24,6 +24,9 @@
 # @param enable_freshclam
 #     If true, will enable the freshclam cron job, otherwise rsync will be used.
 #
+# @param package_ensure
+#     The value used for package ensure attribute.
+#
 # @param schedule_scan
 #     If true, will enable the scheduled system scan.
 #     The default targets are *extremely* conservative so you'll probably want to
@@ -47,8 +50,9 @@ class clamav (
   Boolean       $enable_freshclam      = false,
   Boolean       $schedule_scan         = true,
   String        $rsync_source          = "clamav_${::environment}/",
-  Simplib::Host $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value'  => '127.0.0.1' }),
-  Integer       $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
+  Simplib::Host $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value'    => '127.0.0.1' }),
+  Integer       $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value'   => 2 }),
+  String        $package_ensure        = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
 
   simplib::assert_metadata($module_name)
@@ -80,7 +84,7 @@ class clamav (
     }
 
     # Require the user and group if managing them, otherwise don't.
-    $_clamav_package_enable = $enable ? { true =>  'latest', default => 'absent' }
+    $_clamav_package_enable = $enable ? { true =>  $package_ensure , default => 'absent' }
     $_clamav_package_requires = $manage_group_and_user ? { true => [User[$clamav_user],Group[$clamav_group]], default => [] }
     package { $package_name:
       ensure  => $_clamav_package_enable,
