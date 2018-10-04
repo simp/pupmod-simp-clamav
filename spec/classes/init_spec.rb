@@ -27,7 +27,7 @@ describe 'clamav' do
             })
           }
           it { is_expected.to contain_package('clamav').with({
-              :ensure  => 'latest',
+              :ensure  => 'installed',
               :require => ['User[clam]', 'Group[clam]']
             })
           }

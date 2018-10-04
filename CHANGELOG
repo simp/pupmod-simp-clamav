@@ -1,7 +1,17 @@
-* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.3-0
+* Wed Oct 03 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.1.0-0
+- Add package_ensure parameter to use simp_options package_ensure value
+  for managing the installation of packages.
+  If simp_options is not being used it will default to install (
+  previously set to latest)
+  If not using simp_options the value  can be changed  by setting clamav::package_ensure
+  to latest in hiera.
+- update Gemfile to use puppet ~> 5.0
+- update .rubyversion to 2.4.4
+
+* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
 - Drop Hiera 4 support
 
-* Mon Mar 19 2018 Trevor Vaughan <tvaughan@onxypoint.com> - 6.0.3-0
+* Mon Mar 19 2018 Trevor Vaughan <tvaughan@onxypoint.com> - 6.1.0-0
 - Add support for Puppet 5 and OEL
 
 * Mon Sep 11 2017 Chris Tessmer <chris.tessmeri@onyxpoint.com> - 6.0.2-0
