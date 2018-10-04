@@ -49,7 +49,8 @@ class clamav (
   String        $package_name          = 'clamav',
   Boolean       $enable_freshclam      = false,
   Boolean       $schedule_scan         = true,
-  String[1]     $rsync_source          = "clamav_${::environment}/",
+  # This needs to allow empty strings for follow on logic
+  String        $rsync_source          = "clamav_${::environment}/",
   Simplib::Host $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value' => '127.0.0.1' }),
   Integer       $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   String[1]     $package_ensure        = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
