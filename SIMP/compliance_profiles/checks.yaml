@@ -1,0 +1,76 @@
+---
+version: 2.0.0
+checks:
+  oval:com.puppet.forge.simp.clamav.enable:
+    settings:
+      parameter: clamav::enable
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53_rev4:SI-3:a: true
+      disa_stig: true
+      RHEL-07-030810: true
+      SRG-OS-000480-GPOS-00227: true
+      cci:CCI-000366: true
+    identifiers:
+      nist_800_53_rev4:
+      - SI-3:a
+      disa_stig:
+      - RHEL-07-030810
+      - SRG-OS-000480-GPOS-00227
+      - CCI-000366
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_install_mcafee_antivirus
+    - install_mcafee_antivirus
+  oval:com.puppet.forge.simp.clamav.enable_freshclam:
+    settings:
+      parameter: clamav::enable_freshclam
+      value: false
+    type: puppet-class-parameter
+    controls:
+      nist_800_53_rev4:SI-3:b: true
+      disa_stig: true
+      RHEL-07-030810: true
+      SRG-OS-000480-GPOS-00227: true
+      cci:CCI-000366: true
+    identifiers:
+      nist_800_53_rev4:
+      - SI-3:b
+      disa_stig:
+      - RHEL-07-030810
+      - SRG-OS-000480-GPOS-00227
+      - CCI-000366
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_install_mcafee_antivirus
+    - install_mcafee_antivirus
+  oval:com.puppet.forge.simp.clamav.package_name:
+    settings:
+      parameter: clamav::package_name
+      value: clamav
+    type: puppet-class-parameter
+    controls:
+      nist_800_53_rev4:SI-3:a: true
+    identifiers:
+      nist_800_53_rev4:
+      - SI-3:a
+  oval:com.puppet.forge.simp.clamav.schedule_scan:
+    settings:
+      parameter: clamav::schedule_scan
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53_rev4:SI-3:c: true
+      disa_stig: true
+      RHEL-07-030810: true
+      SRG-OS-000480-GPOS-00227: true
+      cci:CCI-000366: true
+    identifiers:
+      nist_800_53_rev4:
+      - SI-3:c
+      disa_stig:
+      - RHEL-07-030810
+      - SRG-OS-000480-GPOS-00227
+      - CCI-000366
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_install_mcafee_antivirus
+    - install_mcafee_antivirus

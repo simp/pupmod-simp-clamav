@@ -1,3 +1,6 @@
+* Thu Jun 06 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> -6.2.1-0
+- Add v2 compliance_markup data
+
 * Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.2.0-0
 - Standardized cron datatypes to use the Simplib::Cron::### types.  This
   allows more flexibility in cron scheduling.

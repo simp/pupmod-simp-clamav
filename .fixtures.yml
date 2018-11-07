@@ -1,8 +1,13 @@
 ---
 fixtures:
   repositories:
+    compliance_markup:
+      repo: "https://github.com/simp/pupmod-simp-compliance_markup"
+      branch: "testing_hotfix_06062019"
+    cron_core: https://github.com/puppetlabs/puppetlabs-cron_core
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     rsync: https://github.com/simp/pupmod-simp-rsync
+    selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core
     simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib:  https://github.com/simp/puppetlabs-stdlib
   symlinks:
