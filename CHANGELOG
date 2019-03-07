@@ -1,3 +1,7 @@
+* Thu Mar 07 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
+- Update the upper bound of stdlib to < 6.0.0
+- Update URLs in the README.md
+
 * Wed Oct 03 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.1.0-0
 - Add package_ensure parameter to use simp_options package_ensure value
   for managing the installation of packages.
