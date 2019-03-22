@@ -46,6 +46,8 @@ class clamav (
   Boolean       $manage_group_and_user = true,
   String        $clamav_user           = 'clam',
   String        $clamav_group          = 'clam',
+  String        $clamupdate_user       = 'clamupdate',
+  String        $clamupdate_group      = 'clamupdate',
   String        $package_name          = 'clamav',
   Boolean       $enable_freshclam      = false,
   Boolean       $schedule_scan         = true,
@@ -106,37 +108,58 @@ class clamav (
 
     if $enable_freshclam {
       $_fresclam_ensure = $enable ? {true =>'file', default => 'absent'}
-      file { '/etc/cron.daily/freshclam':
-        ensure => $_fresclam_ensure,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0755',
-        source => 'puppet:///modules/clamav/freshclam.cron'
-      }
     }
-    else {
-      file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
-      if $enable {
-        unless $rsync_source.empty() {
-          rsync { 'clamav':
-            source  => $rsync_source,
-            target  => '/var/lib/clamav',
-            server  => $rsync_server,
-            timeout => $rsync_timeout,
-            delete  => true,
-            require => Package[$package_name]
-          }
+    if $enable {
+      file {'/var/simp/environments/simp/rsync':
+        ensure => 'directory',
+        mode   => '0755'
+      }
+      file {'/var/simp/environments/simp/rsync/Global':
+        ensure => 'directory',
+        mode   => '0755'
+      }
+      file { '/var/simp/environments/simp/rsync/Global/clamav':
+        ensure => 'directory',
+        owner  => $clamupdate_user,
+        group  => $clamupdate_group,
+        mode   => '0755'
+      }
+
+      unless $rsync_source.empty() {
+        rsync { 'clamav':
+          source  => $rsync_source,
+          target  => '/var/lib/clamav',
+          server  => $rsync_server,
+          timeout => $rsync_timeout,
+          delete  => true,
+          require => Package[$package_name]
+        }
+        file { '/etc/cron.daily/freshclam':
+          ensure => $_fresclam_ensure,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0755',
+          source => 'puppet:///modules/clamav/freshclam.cron'
+        }
+      }
+      else {
+        file { '/etc/cron.daily/freshclam':
+          ensure => $_fresclam_ensure,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0755',
+          source => 'puppet:///modules/clamav/freshclam.rsync.cron'
         }
       }
     }
+  }
 
-    if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
-      $_selboolean_value = $enable ? {true =>  'on', default => 'off'}
-      selboolean { 'antivirus_can_scan_system':
-        persistent => true,
-        value      => $_selboolean_value
-      }
+  if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
+    $_selboolean_value = $enable ? {true =>  'on', default => 'off'}
+    selboolean { 'antivirus_can_scan_system':
+      persistent => true,
+      value      => $_selboolean_value
     }
   }
 }
