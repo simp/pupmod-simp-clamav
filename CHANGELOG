@@ -1,3 +1,6 @@
+* Fri Mar 22 2019 Jim Anderson <thesemicolons@protonmail.com> - 6.1.2-0
+- Updated to manage permission of the rsync/Global/clamav folders
+
 * Thu Mar 07 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
 - Update the upper bound of stdlib to < 6.0.0
 - Update URLs in the README.md
