@@ -46,6 +46,8 @@ class clamav (
   Boolean       $manage_group_and_user = true,
   String        $clamav_user           = 'clam',
   String        $clamav_group          = 'clam',
+  String        $clamupdate_user       = 'clamupdate',
+  String        $clamupdate_group      = 'clamupdate',
   String        $package_name          = 'clamav',
   Boolean       $enable_freshclam      = false,
   Boolean       $schedule_scan         = true,
@@ -118,6 +120,21 @@ class clamav (
       file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
       if $enable {
+        file {'/var/simp/environments/simp/rsync':
+          ensure => 'directory',
+          mode   => '0755'
+        }
+        file {'/var/simp/environments/simp/rsync/Global':
+          ensure => 'directory',
+          mode   => '0755'
+        }
+        file { '/var/simp/environments/simp/rsync/Global/clamav':
+          ensure => 'directory',
+          owner  => $clamupdate_user,
+          group  => $clamupdate_group,
+          mode   => '0755'
+        }
+
         unless $rsync_source.empty() {
           rsync { 'clamav':
             source  => $rsync_source,
