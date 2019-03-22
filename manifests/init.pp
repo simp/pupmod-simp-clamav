@@ -136,7 +136,7 @@ class clamav (
           require => Package[$package_name]
         }
         file { '/etc/cron.daily/freshclam':
-          ensure => $_fresclam_ensure,
+          ensure => $_freshclam_ensure,
           owner  => 'root',
           group  => 'root',
           mode   => '0755',
