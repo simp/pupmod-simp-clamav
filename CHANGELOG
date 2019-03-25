@@ -1,3 +1,6 @@
+* Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.2.0-0
+- Standardized cron datatypes to use the Simplib::Cron::### types
+
 * Thu Mar 07 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
 - Update the upper bound of stdlib to < 6.0.0
 - Update URLs in the README.md

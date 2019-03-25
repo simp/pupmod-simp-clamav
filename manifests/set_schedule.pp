@@ -40,11 +40,11 @@
 #
 class clamav::set_schedule (
   Boolean                       $enable            = true,
-  Variant[String,Array[String]] $minute            = '32',
-  Variant[String,Array[String]] $hour              = '5',
-  Variant[String,Array[String]] $monthday          = '*',
-  Variant[String,Array[String]] $month             = '*',
-  Variant[String,Array[String]] $weekday           = '0',
+  Simplib::Cron::Minute         $minute            = '32',
+  Simplib::Cron::Hour           $hour              = '5',
+  Simplib::Cron::MonthDay       $monthday          = '*',
+  Simplib::Cron::Month          $month             = '*',
+  Simplib::Cron::Weekday        $weekday           = '0',
   Integer                       $nice_level        = 19,
   Array[Stdlib::Absolutepath]   $scan_targets      = ['/tmp','/var/tmp','/dev/shm'],
   Boolean                       $official_db_only  = true,
