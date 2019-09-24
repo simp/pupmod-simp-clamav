@@ -1,10 +1,10 @@
-# This class allows you to set a schedule for ClamAV to run a check
-# on your system via cron.
+# @summary Allows you to set a schedule for ClamAV to run a check on your system via cron
 #
 # @see clamscan(1) for any undefined variables.
-# All 'yes/no' variables have been translated to 'true/false' for consistency.
 #
-# Defaults to weekly.
+# * All 'yes/no' variables have been translated to 'true/false' for consistency.
+#
+# * Defaults to weekly.
 #
 # @param enable
 #   Enables/Disables the clamscan cronjob.  Defaults to true.
@@ -15,7 +15,7 @@
 # @param weekday
 # @param nice_level
 #   The system 'nice' level at which to run the virus scan.
-# @param scan_directory
+# @param scan_targets
 #   An array of directories upon which to perform this scan.
 # @param official_db_only
 # @param logfile
@@ -27,6 +27,7 @@
 # @param bytecode_unsigned
 # @param bytecode_timeout
 # @param detect_pua
+# @param exclude_pua
 # @param include_pua
 # @param max_files
 # @param max_filesize
@@ -35,6 +36,8 @@
 #   The maximum scanned file size to scan, in megabytes.
 # @param max_recursion
 # @param max_dir_recursion
+# @param logrotate
+#   Enable the use of the SIMP logrotate capabilities.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
