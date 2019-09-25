@@ -18,7 +18,7 @@ describe 'clamav class' do
 
   let(:manifest) {
     <<-EOS
-      include '::clamav'
+      include 'clamav'
     EOS
   }
 

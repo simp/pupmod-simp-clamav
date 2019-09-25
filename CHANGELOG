@@ -1,4 +1,9 @@
-* Thu Jun 06 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> -6.3.0-0
+* Tue Sep 24 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.4.0-0
+- Disable rsync pulls by default
+- Update README.md
+- Add REFERENCE.md
+
+* Thu Jun 06 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.3.0-0
 - Add v2 compliance_markup data
 
 * Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.2.0-0

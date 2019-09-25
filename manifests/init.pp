@@ -1,43 +1,54 @@
-# This class installs the command line ClamAV anti-virus scanner and configures
-# updates to be pulled from rsync.
+# @summary Installs the command line ClamAV anti-virus scanner.
 #
 # If you wish to schedule a virus scan, you will need to create a cron job that
 # is appropriate, or drop a script into the cron.* directory that is
 # appropriate.
 #
 # @param enable
-#     Disables/Enables clamav.  Toggles freshclam/clamscan cronjobs, selbooleans,
-#     rsync, and package installation.
+#   Disables/Enables clamav
+#
+#   * Toggles freshclam/clamscan cronjobs, selbooleans, rsync, and package
+#     installation.
 #
 # @param manage_group_and_user
-#     Optionally manage the clamav user and group.
+#   Optionally manage the clamav user and group.
 #
 # @param clamav_user
-#     The clamav user.
+#   The clamav user.
 #
 # @param clamav_group
-#     The clamav group.
+#   The clamav group.
 #
 # @param package_name
-#     The name of clamav rpm package.
+#   The name of clamav rpm package.
 #
 # @param enable_freshclam
-#     If true, will enable the freshclam cron job, otherwise rsync will be used.
+#   If true, will enable the freshclam cron job.
 #
-# @param package_ensure
-#     The value used for package ensure attribute.
+# @param enable_data_rsync
+#   If true, will use the SIMP rsync subsystem to pull down clamav DAT files.
+#
+#   * NOTE: `$enable_freshclam` takes precedence
 #
 # @param schedule_scan
-#     If true, will enable the scheduled system scan.
-#     The default targets are *extremely* conservative so you'll probably want to
-#     adjust this.
+#   If true, will enable the scheduled system scan.
+#
+#   * The default targets are *extremely* conservative so you will probably
+#     want to adjust this.
 #
 # @param rsync_source
-#    The rsync server source path for the clamav definitions.
-#    * Setting this parameter to an empty String will disable the clamav rsync.
+#   The rsync server source path for the clamav definitions.
+#
+#   * Setting this parameter to an empty String will disable the clamav rsync.
 #
 # @param rsync_server
-#    The hostname of IP of the rsync server providing clamav definitions.
+#   The hostname or IP of the rsync server providing clamav definitions.
+#
+# @param rsync_timeout
+#   The amount of time, in seconds, to wait for rsync to respond.
+#
+# @param package_ensure
+#   The value used for package ensure attribute.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
@@ -48,6 +59,7 @@ class clamav (
   String        $clamav_group          = 'clam',
   String        $package_name          = 'clamav',
   Boolean       $enable_freshclam      = false,
+  Boolean       $enable_data_rsync     = false,
   Boolean       $schedule_scan         = true,
   # This needs to allow empty strings for follow on logic
   String        $rsync_source          = "clamav_${::environment}/",
@@ -117,21 +129,19 @@ class clamav (
     else {
       file { '/etc/cron.daily/freshclam': ensure => 'absent' }
 
-      if $enable {
-        unless $rsync_source.empty() {
-          rsync { 'clamav':
-            source  => $rsync_source,
-            target  => '/var/lib/clamav',
-            server  => $rsync_server,
-            timeout => $rsync_timeout,
-            delete  => true,
-            require => Package[$package_name]
-          }
+      if $enable and $enable_data_rsync and !empty($rsync_source) {
+        rsync { 'clamav':
+          source  => $rsync_source,
+          target  => '/var/lib/clamav',
+          server  => $rsync_server,
+          timeout => $rsync_timeout,
+          delete  => true,
+          require => Package[$package_name]
         }
       }
     }
 
-    if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
+    if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
       $_selboolean_value = $enable ? {true =>  'on', default => 'off'}
       selboolean { 'antivirus_can_scan_system':
         persistent => true,
