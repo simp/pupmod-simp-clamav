@@ -56,16 +56,34 @@ it can be used independently:
     default and must be explicitly opted into by administrators.  Please review
     the `simp-simp_options` module for details.
 
+The clamav module was removed from the  default class list in all simp scenarios
+in SIMP 6.5.
+
+Setting the SIMP catalyst, `simp_options::clamav`, to false does not
+uninstall ClamAV, it simply prevents this module from doing anything.
+These catalysts are used by SIMP to allow users to override default
+behavior of classes that are included by default.
+
+SIMP 6.5 removed clamav from the default list of classes.
+Users of SIMP 6.5 or later must add clamav to the class list or include it via a manifest.
+
+The catalyst `simp_options::clamav` has been deprecated. It will be removed
+in future releases. It is still used a wrapper for this module for
+backwards compatibility.  You must therefor have have `simp_options::clamav` undefined
+of set to true for this module to do anything.
 
 ## Using clamav
 
-To configure ClamAV to install and run:
+This module can be used to add or remove clamav from a system.
+
+To manage ClamAV with this module:
 
 ```puppet
 include clamav
 ```
 
-To remove clamav from the system, set the following via Hiera:
+By default this module will install and run ClamAV.
+To remove ClamAV from the system set the following via Hiera:
 
 ```yaml
 ---

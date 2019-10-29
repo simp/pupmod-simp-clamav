@@ -68,6 +68,11 @@ describe 'clamav class' do
         it { is_expected.to be_file }
       }
 
+      it 'should create a crontab entry' do
+        stdout = on(client, 'crontab -l' ).stdout
+        expect(stdout).to include('/usr/bin/clamscan -l /var/log/clamscan.log')
+      end
+
       if on(client, '/usr/sbin/selinuxenabled', :accept_all_exit_codes => true).exit_code == 0
         it 'should have the selinux boolean "antivirus_can_scan_system" set' do
           result = on(client, '/usr/sbin/getsebool antivirus_can_scan_system')
@@ -97,6 +102,11 @@ describe 'clamav class' do
       describe file('/etc/cron.daily/freshclam') {
         it { is_expected.to_not be_file }
       }
+
+      it 'should not create a crontab entry' do
+        stdout = on(client, 'crontab -l' ).stdout
+        expect(stdout).not_to include('/usr/bin/clamscan -l /var/log/clamscan.log')
+      end
 
       if on(client, '/usr/sbin/selinuxenabled', :accept_all_exit_codes => true).exit_code == 0
         it 'should have the selinux boolean "antivirus_can_scan_system" set' do

@@ -70,7 +70,8 @@ class clamav (
 
   simplib::assert_metadata($module_name)
 
-  # If the catalyst is disabled, don't manage anything
+  # Setting simp_options::clamav to false disables this module and it will do nothing.
+  # It will not remove clamav from a system.  See README for more information.
   if simplib::lookup('simp_options::clamav', { 'default_value' =>  true }) {
 
     if $schedule_scan {
