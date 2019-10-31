@@ -10,35 +10,38 @@ describe 'clamav' do
       let(:environment) {'production'}
 
       context "on #{os}" do
-        it { is_expected.to create_class('clamav') }
-        it { is_expected.to compile.with_all_deps }
+        context 'with default params' do
+          it { is_expected.to create_class('clamav') }
+          it { is_expected.to compile.with_all_deps }
 
-        it { is_expected.to create_group('clam').with_ensure('present') }
-        it { is_expected.to create_user('clam').with({
-          :ensure    => 'present',
-          :allowdupe => false,
-          :uid       => '409',
-          :shell     => '/sbin/nologin',
-          :gid       => 'clam',
-          :home      => '/var/lib/clamav',
-          :require   => 'Group[clam]'
-          })
-        }
-        it { is_expected.to contain_package('clamav').with({
-            :ensure  => 'installed',
-            :require => ['User[clam]', 'Group[clam]']
-          })
-        }
-        it { is_expected.to contain_package('clamav-lib.i386').with({
-            :ensure => 'absent',
-            :notify => 'Package[clamav]'
-          })
-        }
-        it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
-        it { is_expected.not_to contain_rsync('clamav').with({
-          :source => 'clamav_production/'
-          })
-        }
+          it { is_expected.to create_group('clam').with_ensure('present') }
+          it { is_expected.to create_user('clam').with({
+            :ensure    => 'present',
+            :allowdupe => false,
+            :uid       => '409',
+            :shell     => '/sbin/nologin',
+            :gid       => 'clam',
+            :home      => '/var/lib/clamav',
+            :require   => 'Group[clam]'
+            })
+          }
+          it { is_expected.to contain_package('clamav').with({
+              :ensure  => 'installed',
+              :require => ['User[clam]', 'Group[clam]']
+            })
+          }
+          it { is_expected.to contain_package('clamav-lib.i386').with({
+              :ensure => 'absent',
+              :notify => 'Package[clamav]'
+            })
+          }
+          it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
+          it { is_expected.not_to contain_rsync('clamav').with({
+            :source => 'clamav_production/'
+            })
+          }
+          it { is_expected.to contain_class('clamav::set_schedule')}
+        end
 
         context 'with manage_group_and_user => false' do
           let(:params) {{
@@ -97,6 +100,18 @@ describe 'clamav' do
           it { is_expected.to contain_package('clamav').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
           it { is_expected.not_to contain_rsync('clamav') }
+        end
+
+        context 'with enable => false and manage user and group false' do
+          let(:params) {{
+            :enable => false,
+            :schedule_scan => false,
+            :manage_group_and_user => false
+          }}
+          it { is_expected.to contain_package('clamav').with_ensure('absent') }
+          it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
+          it { is_expected.not_to contain_rsync('clamav') }
+          it { is_expected.to_not contain_class('clamav::set_schedule')}
         end
       end
     end

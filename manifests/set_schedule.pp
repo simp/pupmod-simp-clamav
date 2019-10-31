@@ -42,7 +42,7 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav::set_schedule (
-  Boolean                       $enable            = true,
+  Boolean                       $enable            = simplib::lookup('clamav::enable', { 'default_value' => true}),
   Simplib::Cron::Minute         $minute            = '32',
   Simplib::Cron::Hour           $hour              = '5',
   Simplib::Cron::MonthDay       $monthday          = '*',

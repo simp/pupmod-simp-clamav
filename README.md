@@ -54,18 +54,41 @@ it can be used independently:
 
   * If used independently, all SIMP-managed security subsystems are disabled by
     default and must be explicitly opted into by administrators.  Please review
-    the `simp-simp_options` module for details.
+    the `simp-simp_options` module for details.  These catalysts are used by
+    SIMP to allow users to override default behavior of classes that are
+    included by default.
 
+**NOTE:**
+
+* SIMP's `clamav` class was removed from the default class list in all SIMP
+  scenarios in SIMP 6.5.  Users of SIMP 6.5 or later must manually add `clamav`
+  to the class list or include it via a manifest.
+
+* Because of the SIMP 6.5 clamav change, SIMP's `simp_options::clamav` catalyst
+  has been deprecated and will be removed in a future release.  In the interim,
+  the catalyst is still used as a wrapper for this module for backwards
+  compatibility.  Therefore, you must have `simp_options::clamav` undefined or set
+  to `true` for this module to do anything.
+
+* Setting the SIMP catalyst, `simp_options::clamav`, to `false` does *not* uninstall
+  ClamAV, it simply prevents this module from doing anything.  See the
+  ``Using clamav`` section below for how to remove ClamAV from the system.
 
 ## Using clamav
 
-To configure ClamAV to install and run:
+This module can be used to add or remove clamav from a system.
+
+To manage ClamAV with this module:
 
 ```puppet
 include clamav
 ```
 
-To remove clamav from the system, set the following via Hiera:
+By default this module will install ClamAV and set up a cron
+to do a scan.
+
+
+To remove ClamAV from the system set the following via Hiera:
 
 ```yaml
 ---
