@@ -1,9 +1,9 @@
 * Tue Oct 29 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 6.4.0-0
-- Updated the README to clarify the use of simp_options::clamav.
-  and note that clamav was removed from the default class list
+- Updated the README to clarify what simp_options::clamav actually does
+  and to note that clamav was removed from the SIMP's default class list
   in SIMP 6.5.
-- Set the default for set_schedule::enable to lookup clamav::enable.
-  so it would remove clamav schedule if disabling clamav.
+- Set the default for clamav::set_schedule::enable to lookup clamav::enable,
+  so that class will remove the clamav schedule if clamav is disabled.
 
 * Tue Sep 24 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.4.0-0
 - Disable rsync pulls by default
