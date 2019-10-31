@@ -58,19 +58,19 @@ it can be used independently:
 
 The clamav module was removed from the  default class list in all simp scenarios
 in SIMP 6.5.
+Users of SIMP 6.5 or later must add clamav to the class list or include it via a manifest.
+
+The catalyst `simp_options::clamav` has been deprecated. It will be removed
+in future releases. It is still used as a wrapper for this module for
+backwards compatibility.  You must therefore have `simp_options::clamav` undefined
+or set to true for this module to do anything.
 
 Setting the SIMP catalyst, `simp_options::clamav`, to false does not
 uninstall ClamAV, it simply prevents this module from doing anything.
 These catalysts are used by SIMP to allow users to override default
 behavior of classes that are included by default.
 
-SIMP 6.5 removed clamav from the default list of classes.
 Users of SIMP 6.5 or later must add clamav to the class list or include it via a manifest.
-
-The catalyst `simp_options::clamav` has been deprecated. It will be removed
-in future releases. It is still used a wrapper for this module for
-backwards compatibility.  You must therefor have have `simp_options::clamav` undefined
-of set to true for this module to do anything.
 
 ## Using clamav
 
