@@ -68,9 +68,8 @@ or set to true for this module to do anything.
 Setting the SIMP catalyst, `simp_options::clamav`, to false does not
 uninstall ClamAV, it simply prevents this module from doing anything.
 These catalysts are used by SIMP to allow users to override default
-behavior of classes that are included by default.
-
-Users of SIMP 6.5 or later must add clamav to the class list or include it via a manifest.
+behavior of classes that are included by default. See the ``using clamav``
+section below for how to remove clamav from the system.
 
 ## Using clamav
 
@@ -82,7 +81,8 @@ To manage ClamAV with this module:
 include clamav
 ```
 
-By default this module will install and run ClamAV.
+By default this module will install ClamAV and set up a cron
+to do a scan.
 To remove ClamAV from the system set the following via Hiera:
 
 ```yaml
