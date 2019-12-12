@@ -146,7 +146,7 @@ Data type: `Boolean`
 
 Enables/Disables the clamscan cronjob.  Defaults to true.
 
-Default value: `true`
+Default value: simplib::lookup('clamav::enable', { 'default_value' => true})
 
 ##### `minute`
 
