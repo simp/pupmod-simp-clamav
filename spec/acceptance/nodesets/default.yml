@@ -15,6 +15,10 @@ HOSTS:
     box:        centos/6
     hypervisor: <%= hypervisor %>
     yum_repos:
+      chef-current:
+        baseurl: 'https://packages.chef.io/repos/yum/current/el/6/$basearch'
+        gpgkeys:
+          - https://packages.chef.io/chef.asc
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
         gpgkeys:
@@ -27,6 +31,10 @@ HOSTS:
     box: centos/7
     hypervisor: <%= hypervisor %>
     yum_repos:
+      chef-current:
+        baseurl: 'https://packages.chef.io/repos/yum/current/el/7/$basearch'
+        gpgkeys:
+          - https://packages.chef.io/chef.asc
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
@@ -39,6 +47,10 @@ HOSTS:
     box: centos/8
     hypervisor: <%= hypervisor %>
     yum_repos:
+      chef-current:
+        baseurl: 'https://packages.chef.io/repos/yum/current/el/8/$basearch'
+        gpgkeys:
+          - https://packages.chef.io/chef.asc
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch'
         gpgkeys:
