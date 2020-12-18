@@ -1,3 +1,6 @@
+* Thu Dec 17 2020 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.4.1
+- Removed EL6 support
+
 * Tue Oct 29 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 6.4.0-0
 - Updated the README to clarify what simp_options::clamav actually does
   and to note that clamav was removed from the SIMP's default class list
