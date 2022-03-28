@@ -11,7 +11,7 @@
 
 ## Classes
 
-### <a name="clamav"></a>`clamav`
+### <a name="clamav"></a> `clamav`
 
 If you wish to schedule a virus scan, you will need to create a cron job that
 is appropriate, or drop a script into the cron.* directory that is
