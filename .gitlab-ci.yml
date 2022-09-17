@@ -353,6 +353,12 @@ pup6.pe:
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
+pup6.pe-amzn2:
+  <<: *pup_6_pe
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[default,amzn2]'
+
 pup6.pe-fips:
   <<: *pup_6_pe
   <<: *acceptance_base
