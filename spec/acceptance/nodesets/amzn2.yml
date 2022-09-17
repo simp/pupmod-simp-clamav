@@ -9,6 +9,7 @@ HOSTS:
   amzn2:
     roles:
       - default
+      - client
     platform: el-7-x86_64
     box: gbailey/amzn2
     hypervisor: <%= hypervisor %>
