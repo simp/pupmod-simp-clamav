@@ -106,7 +106,7 @@ class clamav (
     }
 
     # This is hackery to fix an update issue from the past.
-    if $facts['facts['os']['hardware']'] == 'x86_64' {
+    if $facts['os']['hardware'] == 'x86_64' {
       package { 'clamav.i386':
         ensure => 'absent',
         notify => Package['clamav-lib.i386']
