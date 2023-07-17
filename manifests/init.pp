@@ -62,7 +62,7 @@ class clamav (
   Boolean       $enable_data_rsync     = false,
   Boolean       $schedule_scan         = true,
   # This needs to allow empty strings for follow on logic
-  String        $rsync_source          = "clamav_${::environment}/",
+  String        $rsync_source          = "clamav_${facts['environment']}/",
   Simplib::Host $rsync_server          = simplib::lookup('simp_options::rsync::server', { 'default_value' => '127.0.0.1' }),
   Integer       $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   String[1]     $package_ensure        = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
@@ -106,7 +106,7 @@ class clamav (
     }
 
     # This is hackery to fix an update issue from the past.
-    if $::hardwaremodel == 'x86_64' {
+    if $facts['os']['hardware'] == 'x86_64' {
       package { 'clamav.i386':
         ensure => 'absent',
         notify => Package['clamav-lib.i386']
@@ -142,7 +142,7 @@ class clamav (
       }
     }
 
-    if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
+    if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
       $_selboolean_value = $enable ? {true =>  'on', default => 'off'}
       selboolean { 'antivirus_can_scan_system':
         persistent => true,
