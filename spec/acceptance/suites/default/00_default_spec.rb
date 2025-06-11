@@ -54,6 +54,7 @@ describe 'clamav class' do
         apply_manifest_on(client, manifest, { catch_changes: true })
       end
 
+      # rubocop:disable RSpec/RepeatedExample
       describe user('clam') {
         it { is_expected.to exist }
       }
@@ -61,6 +62,7 @@ describe 'clamav class' do
       describe group('clam') {
         it { is_expected.to exist }
       }
+      # rubocop:enable RSpec/RepeatedExample
 
       describe package('clamav') {
         it { is_expected.to be_installed }
