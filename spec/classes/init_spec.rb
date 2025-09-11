@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'clamav' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       let(:facts) do
-        facts
+        os_facts
       end
       let(:environment) { 'production' }
 
@@ -15,33 +15,33 @@ describe 'clamav' do
 
           it { is_expected.to create_group('clam').with_ensure('present') }
           it {
-            is_expected.to create_user('clam').with({
-                                                      ensure: 'present',
-            allowdupe: false,
-            uid: '409',
-            shell: '/sbin/nologin',
-            gid: 'clam',
-            home: '/var/lib/clamav',
-            require: 'Group[clam]',
-                                                    })
+            is_expected.to create_user('clam').with(
+              ensure: 'present',
+              allowdupe: false,
+              uid: '409',
+              shell: '/sbin/nologin',
+              gid: 'clam',
+              home: '/var/lib/clamav',
+              require: 'Group[clam]',
+            )
           }
           it {
-            is_expected.to contain_package('clamav').with({
-                                                            ensure: 'installed',
+            is_expected.to contain_package('clamav').with(
+              ensure: 'installed',
               require: ['User[clam]', 'Group[clam]'],
-                                                          })
+            )
           }
           it {
-            is_expected.to contain_package('clamav-lib.i386').with({
-                                                                     ensure: 'absent',
+            is_expected.to contain_package('clamav-lib.i386').with(
+              ensure: 'absent',
               notify: 'Package[clamav]',
-                                                                   })
+            )
           }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
           it {
-            is_expected.not_to contain_rsync('clamav').with({
-                                                              source: 'clamav_production/',
-                                                            })
+            is_expected.not_to contain_rsync('clamav').with(
+              source: 'clamav_production/',
+            )
           }
           it { is_expected.to contain_class('clamav::set_schedule') }
         end
@@ -56,9 +56,9 @@ describe 'clamav' do
           it { is_expected.not_to contain_group('clam') }
           it { is_expected.not_to contain_user('clam') }
           it {
-            is_expected.to contain_package('clamav').with({
-                                                            require: [],
-                                                          })
+            is_expected.to contain_package('clamav').with(
+              require: [],
+            )
           }
         end
 
@@ -70,16 +70,16 @@ describe 'clamav' do
           end
 
           it {
-            is_expected.to contain_rsync('clamav').with({
-                                                          source: 'clamav_production/',
-                                                        })
+            is_expected.to contain_rsync('clamav').with(
+              source: 'clamav_production/',
+            )
           }
 
           context 'with empty rsync_source' do
             let(:params) do
               {
                 enable_data_rsync: true,
-             rsync_source: '',
+                rsync_source: '',
               }
             end
 
@@ -90,7 +90,7 @@ describe 'clamav' do
             let(:params) do
               {
                 enable_freshclam: true,
-             enable_data_rsync: true,
+                enable_data_rsync: true,
               }
             end
 
@@ -126,8 +126,8 @@ describe 'clamav' do
           let(:params) do
             {
               enable: false,
-           schedule_scan: false,
-           manage_group_and_user: false,
+              schedule_scan: false,
+              manage_group_and_user: false,
             }
           end
 

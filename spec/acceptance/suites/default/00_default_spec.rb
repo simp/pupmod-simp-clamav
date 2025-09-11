@@ -15,13 +15,13 @@ describe 'clamav class' do
 
   let(:disable_hieradata) do
     {
-      'clamav::enable' => false,
-   'clamav::enable_freshclam' => true,
+      'clamav::enable'           => false,
+      'clamav::enable_freshclam' => true,
     }
   end
 
   let(:manifest) do
-    <<-EOS
+    <<~EOS
       include 'clamav'
     EOS
   end
@@ -31,12 +31,12 @@ describe 'clamav class' do
     on client, puppet('config set stringify_facts false')
 
     client['repos']&.each_pair do |repo, metadata|
-      repo_manifest = <<-EOS
-          yumrepo { #{repo}:
-            baseurl => '#{metadata[:url]}',
-            gpgkey => '#{metadata[:gpgkeys].join(' ')}'
-          }
-        EOS
+      repo_manifest = <<~EOS
+        yumrepo { #{repo}:
+          baseurl => '#{metadata[:url]}',
+          gpgkey  => '#{metadata[:gpgkeys].join(' ')}',
+        }
+      EOS
       apply_manifest_on(client, repo_manifest, catch_failures: true)
     end
 
@@ -51,7 +51,7 @@ describe 'clamav class' do
       end
 
       it 'is idempotent' do
-        apply_manifest_on(client, manifest, { catch_changes: true })
+  apply_manifest_on(client, manifest, catch_changes: true)
       end
 
       # rubocop:disable RSpec/RepeatedExample
@@ -96,7 +96,7 @@ describe 'clamav class' do
       end
 
       it 'is idempotent' do
-        apply_manifest_on(client, manifest, { catch_changes: true })
+  apply_manifest_on(client, manifest, catch_changes: true)
       end
 
       describe package('clamav') {
