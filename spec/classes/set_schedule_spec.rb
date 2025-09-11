@@ -24,7 +24,7 @@ describe 'clamav::set_schedule' do
         context 'with enable => false' do
           let(:params) do
             {
-              enable: false
+              enable: false,
             }
           end
 

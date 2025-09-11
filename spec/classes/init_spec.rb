@@ -22,25 +22,25 @@ describe 'clamav' do
             shell: '/sbin/nologin',
             gid: 'clam',
             home: '/var/lib/clamav',
-            require: 'Group[clam]'
+            require: 'Group[clam]',
                                                     })
           }
           it {
             is_expected.to contain_package('clamav').with({
                                                             ensure: 'installed',
-              require: ['User[clam]', 'Group[clam]']
+              require: ['User[clam]', 'Group[clam]'],
                                                           })
           }
           it {
             is_expected.to contain_package('clamav-lib.i386').with({
                                                                      ensure: 'absent',
-              notify: 'Package[clamav]'
+              notify: 'Package[clamav]',
                                                                    })
           }
           it { is_expected.to contain_file('/etc/cron.daily/freshclam').with_ensure('absent') }
           it {
             is_expected.not_to contain_rsync('clamav').with({
-                                                              source: 'clamav_production/'
+                                                              source: 'clamav_production/',
                                                             })
           }
           it { is_expected.to contain_class('clamav::set_schedule') }
@@ -49,7 +49,7 @@ describe 'clamav' do
         context 'with manage_group_and_user => false' do
           let(:params) do
             {
-              manage_group_and_user: false
+              manage_group_and_user: false,
             }
           end
 
@@ -57,7 +57,7 @@ describe 'clamav' do
           it { is_expected.not_to contain_user('clam') }
           it {
             is_expected.to contain_package('clamav').with({
-                                                            require: []
+                                                            require: [],
                                                           })
           }
         end
@@ -65,13 +65,13 @@ describe 'clamav' do
         context 'with enable_data_rsync => true' do
           let(:params) do
             {
-              enable_data_rsync: true
+              enable_data_rsync: true,
             }
           end
 
           it {
             is_expected.to contain_rsync('clamav').with({
-                                                          source: 'clamav_production/'
+                                                          source: 'clamav_production/',
                                                         })
           }
 
@@ -79,7 +79,7 @@ describe 'clamav' do
             let(:params) do
               {
                 enable_data_rsync: true,
-             rsync_source: ''
+             rsync_source: '',
               }
             end
 
@@ -90,7 +90,7 @@ describe 'clamav' do
             let(:params) do
               {
                 enable_freshclam: true,
-             enable_data_rsync: true
+             enable_data_rsync: true,
               }
             end
 
@@ -102,7 +102,7 @@ describe 'clamav' do
         context 'with enable_freshclam => true' do
           let(:params) do
             {
-              enable_freshclam: true
+              enable_freshclam: true,
             }
           end
 
@@ -113,7 +113,7 @@ describe 'clamav' do
         context 'with enable => false' do
           let(:params) do
             {
-              enable: false
+              enable: false,
             }
           end
 
@@ -127,7 +127,7 @@ describe 'clamav' do
             {
               enable: false,
            schedule_scan: false,
-           manage_group_and_user: false
+           manage_group_and_user: false,
             }
           end
 

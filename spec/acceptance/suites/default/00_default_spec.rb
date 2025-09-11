@@ -9,14 +9,14 @@ describe 'clamav class' do
   # case.
   let(:default_hieradata) do
     {
-      'clamav::enable_freshclam' => true
+      'clamav::enable_freshclam' => true,
     }
   end
 
   let(:disable_hieradata) do
     {
       'clamav::enable' => false,
-   'clamav::enable_freshclam' => true
+   'clamav::enable_freshclam' => true,
     }
   end
 
