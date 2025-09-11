@@ -51,7 +51,7 @@ describe 'clamav class' do
       end
 
       it 'is idempotent' do
-  apply_manifest_on(client, manifest, catch_changes: true)
+        apply_manifest_on(client, manifest, catch_changes: true)
       end
 
       # rubocop:disable RSpec/RepeatedExample
@@ -96,7 +96,7 @@ describe 'clamav class' do
       end
 
       it 'is idempotent' do
-  apply_manifest_on(client, manifest, catch_changes: true)
+        apply_manifest_on(client, manifest, catch_changes: true)
       end
 
       describe package('clamav') {

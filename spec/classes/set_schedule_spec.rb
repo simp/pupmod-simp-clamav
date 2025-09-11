@@ -18,9 +18,7 @@ describe 'clamav::set_schedule' do
         context 'with logrotate = true' do
           let(:hieradata) { 'logrotate_true' }
 
-          it { is_expected.to create_logrotate__rule('clamscan').with_log_files([
-            '/var/log/clamscan.log',
-          ]) }
+          it { is_expected.to create_logrotate__rule('clamscan').with_log_files(['/var/log/clamscan.log']) }
         end
 
         context 'with enable => false' do
