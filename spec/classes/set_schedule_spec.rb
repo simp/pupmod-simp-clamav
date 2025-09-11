@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'clamav::set_schedule' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       let(:facts) do
-        facts
+        os_facts
       end
 
       context "on #{os}" do
@@ -16,14 +16,18 @@ describe 'clamav::set_schedule' do
         end
 
         context 'with logrotate = true' do
-          let(:hieradata) { "logrotate_true" }
-          it { is_expected.to create_logrotate__rule('clamscan').with_log_files(['/var/log/clamscan.log' ]) }
+          let(:hieradata) { 'logrotate_true' }
+
+          it { is_expected.to create_logrotate__rule('clamscan').with_log_files(['/var/log/clamscan.log']) }
         end
 
         context 'with enable => false' do
-          let (:params) {{
-            :enable => false
-          }}
+          let(:params) do
+            {
+              enable: false,
+            }
+          end
+
           it { is_expected.to create_cron('clamscan').with_ensure('absent') }
         end
       end
