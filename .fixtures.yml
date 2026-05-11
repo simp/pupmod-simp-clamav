@@ -1,7 +1,6 @@
 ---
 fixtures:
   repositories:
-    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
     cron_core: https://github.com/puppetlabs/puppetlabs-cron_core.git
     logrotate: https://github.com/simp/pupmod-simp-logrotate.git
     rsync: https://github.com/simp/pupmod-simp-rsync.git
