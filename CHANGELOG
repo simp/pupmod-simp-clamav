@@ -1,3 +1,8 @@
+* Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 7.0.0
+- Remove unmaintained Compliance Engine data
+- Drop Puppet 7/Ruby 2.7 support
+- Replace puppet with openvox
+
 * Mon Oct 23 2023 Steven Pritchard <steve@sicura.us> - 6.9.0
 - [puppetsync] Add EL9 support
 
