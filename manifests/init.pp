@@ -97,7 +97,7 @@ class clamav (
 
     # Require the user and group if managing them, otherwise don't.
     $_clamav_package_enable = $enable ? { true => $package_ensure , default => 'absent' }
-    $_clamav_package_requires = $manage_group_and_user ? { true => ['User' [$clamav_user],'Group' [$clamav_group]], default => [] }
+    $_clamav_package_requires = $manage_group_and_user ? { true => [User[$clamav_user], Group[$clamav_group]], default => [] }
     package { $package_name:
       ensure  => $_clamav_package_enable,
       require => $_clamav_package_requires,
