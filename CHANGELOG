@@ -82,7 +82,7 @@
 - Updated logrotate to use new lastaction API
 - Update puppet dependency and remove OBE pe dependency in metadata.json
 
-* Thu Dec 13 2016 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+* Tue Dec 13 2016 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
 - Updated global catalysts
 - Strong typed
 
