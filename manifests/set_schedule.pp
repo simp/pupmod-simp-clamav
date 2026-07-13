@@ -42,7 +42,7 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class clamav::set_schedule (
-  Boolean                       $enable            = simplib::lookup('clamav::enable', { 'default_value' => true}),
+  Boolean                       $enable            = simplib::lookup('clamav::enable', { 'default_value' => true }),
   Simplib::Cron::Minute         $minute            = '32',
   Simplib::Cron::Hour           $hour              = '5',
   Simplib::Cron::MonthDay       $monthday          = '*',
@@ -69,7 +69,6 @@ class clamav::set_schedule (
   Integer                       $max_dir_recursion = 15,
   Boolean                       $logrotate         = simplib::lookup('simp_options::logrotate', { 'default_value' => false })
 ) {
-
   $_clamscan_ensure = $enable ? { true => 'present', default => 'absent' }
   cron { 'clamscan':
     ensure   => $_clamscan_ensure,
@@ -84,10 +83,10 @@ class clamav::set_schedule (
 
   # add the logrotate file
   if $logrotate {
-    include '::logrotate'
+    include 'logrotate'
 
     logrotate::rule { 'clamscan':
-      log_files                 => [ $logfile ],
+      log_files                 => [$logfile],
       missingok                 => true,
       lastaction_restart_logger => true
     }

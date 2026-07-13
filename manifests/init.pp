@@ -67,20 +67,18 @@ class clamav (
   Integer       $rsync_timeout         = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   String[1]     $package_ensure        = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
-
   simplib::assert_metadata($module_name)
 
   # Setting simp_options::clamav to false disables this module and it will do nothing.
   # It will not remove clamav from a system.  See README for more information.
-  if simplib::lookup('simp_options::clamav', { 'default_value' =>  true }) {
-
+  if simplib::lookup('simp_options::clamav', { 'default_value' => true }) {
     if $schedule_scan {
-      include '::clamav::set_schedule'
+      include 'clamav::set_schedule'
     }
 
     if $manage_group_and_user {
       group { $clamav_group:
-        ensure    =>  'present',
+        ensure    => 'present',
         allowdupe => false,
         gid       => '409'
       }
@@ -98,8 +96,10 @@ class clamav (
     }
 
     # Require the user and group if managing them, otherwise don't.
-    $_clamav_package_enable = $enable ? { true =>  $package_ensure , default => 'absent' }
-    $_clamav_package_requires = $manage_group_and_user ? { true => [User[$clamav_user],Group[$clamav_group]], default => [] }
+    $_clamav_package_enable = $enable ? { true => $package_ensure , default => 'absent' }
+    # lint:ignore:unquoted_string_in_selector  the values are resource references, not unquoted strings (false positive)
+    $_clamav_package_requires = $manage_group_and_user ? { true => [User[$clamav_user], Group[$clamav_group]], default => [] }
+    # lint:endignore
     package { $package_name:
       ensure  => $_clamav_package_enable,
       require => $_clamav_package_requires,
@@ -118,7 +118,7 @@ class clamav (
     }
 
     if $enable_freshclam {
-      $_fresclam_ensure = $enable ? {true =>'file', default => 'absent'}
+      $_fresclam_ensure = $enable ? { true => 'file', default => 'absent' }
       file { '/etc/cron.daily/freshclam':
         ensure => $_fresclam_ensure,
         owner  => 'root',
@@ -143,7 +143,7 @@ class clamav (
     }
 
     if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
-      $_selboolean_value = $enable ? {true =>  'on', default => 'off'}
+      $_selboolean_value = $enable ? { true => 'on', default => 'off' }
       selboolean { 'antivirus_can_scan_system':
         persistent => true,
         value      => $_selboolean_value
