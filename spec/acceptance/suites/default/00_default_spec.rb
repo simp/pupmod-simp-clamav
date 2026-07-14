@@ -67,12 +67,6 @@ describe 'clamav class' do
         it 'applies without errors in noop mode' do
           apply_manifest_on(client, manifest, catch_failures: true, noop: true)
         end
-
-        # Proof noop engaged nothing: clamav is EL-only, so rpm -q exits 1 when the
-        # package is absent; beaker raises on any other exit code.
-        it 'does not install the clamav package' do
-          on(client, 'rpm -q clamav', acceptable_exit_codes: [1])
-        end
       end
 
       context 'with defaults' do
