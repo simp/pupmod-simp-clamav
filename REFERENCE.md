@@ -388,4 +388,3 @@ Data type: `Boolean`
 Enable the use of the SIMP logrotate capabilities.
 
 Default value: `simplib::lookup('simp_options::logrotate', { 'default_value' => false })`
-
